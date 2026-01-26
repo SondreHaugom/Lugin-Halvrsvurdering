@@ -1,1 +1,1 @@
-# Lugin---Halv-rsvurdering-
+# Lugin-Halvrsvurdering-
