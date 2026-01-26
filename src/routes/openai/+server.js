@@ -13,10 +13,10 @@ let response_ID = null;
 
 /** @type {import('./$types').requestHandler} */
 
-export async function POST() {
+export async function POST(request) {
     try {
-        const {messages} = await request.request.json();
-        console.log("Messages received on server:", messages);
+        const {message} = await request.request.json();
+        console.log("Message received on server:", message);
 
         const response = await client.responses.create({
             model: "gpt-5.1",
@@ -24,7 +24,7 @@ export async function POST() {
             input: [
                 {
                     role: "user",
-                    content: messages
+                    content: message,
                 }
             ],
             previous_response_id: response_ID
@@ -33,7 +33,7 @@ export async function POST() {
         response_ID = response.id;
         console.log("Response from OpenAI:", response);
 
-        return json({ response: response.output_text});
+        return json({ response: response.output_text });
     } catch (error) {
         console.error("Error in OpenAI request:", error);
         if (error.response) {
