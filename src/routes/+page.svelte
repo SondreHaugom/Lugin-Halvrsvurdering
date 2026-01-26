@@ -22,23 +22,31 @@
             content = `<div class="user_message"></div>`;
         }
         chatLi.innerHTML = content;
-        chatLi.appendChild(chatLi);
+        chatbox.appendChild(chatLi);
 
         const messageDiv = chatLi.querySelector(className === 'chat_incoming' ? '.bot_message' : '.user_message');
+
+
+        if (className === 'chat_incoming') {
+            messageDiv.innerHTML = message;
+        } else {
+            messageDiv.textContent = message;
+        }
+        chatbox.appendChild(chatLi);
     }
 
 
     const sendtMessage = () => {
         const inputmessage = userInput.value.trim();
-        if (inputMessage === "") return;
-        crealteChatMessage(inputmessage, 'chat_outgoing');
-        crealteChatMessage('Genererer respons...', 'chat_incoming');
+        if (inputmessage === "") return;
+        createChatMessage(inputmessage, 'chat_outgoing');
+        createChatMessage('Genererer respons...', 'chat_incoming');
         
 
         const selectedAgent = toggleBtn.value;
 
-        selectedAgent(inputMessage, selectedAgent).then((bot_response) => {
-            crealteChatMessage(bot_response, 'chat_incoming', true);
+        selectedAgent(inputmessage, selectedAgent).then((bot_response) => {
+            createChatMessage(bot_response, 'chat_incoming', true);
         });
         userInput.value = "";
     }
