@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
 
+
     let chatbox, userInput, sendBtn, resetBtn, toggleBtn;
     let isMenuOpen = true;
 
@@ -9,10 +10,37 @@
     }
 
 
+    const createChatMessage = (message, className ) => {
+        let chatLi = document.createElement("li");
+
+        chatLi.classList.add(className);
+
+        let content = '';
+        if (className === 'chat_incoming') {
+            content = `<div class="bot_message"></div>`;
+        } else {
+            content = `<div class="user_message"></div>`;
+        }
+        chatLi.innerHTML = content;
+        chatLi.appendChild(chatLi);
+
+        const messageDiv = chatLi.querySelector(className === 'chat_incoming' ? '.bot_message' : '.user_message');
+    }
+
 
     const sendtMessage = () => {
         const inputmessage = userInput.value.trim();
         if (inputMessage === "") return;
+        crealteChatMessage(inputmessage, 'chat_outgoing');
+        crealteChatMessage('Genererer respons...', 'chat_incoming');
+        
+
+        const selectedAgent = toggleBtn.value;
+
+        selectedAgent(inputMessage, selectedAgent).then((bot_response) => {
+            crealteChatMessage(bot_response, 'chat_incoming', true);
+        });
+        userInput.value = "";
     }
 
 
@@ -24,6 +52,18 @@
         sendBtn = document.querySelector(".sendBtn");
         resetBtn = document.querySelector(".resetBtn");
         toggleBtn = document.querySelector(".sidebar-btn");
+
+        if (sendBtn) {
+            sendBtn.addEventListener("click", sendtMessage);
+        }
+
+        if (userInput) {
+            userInput.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    sendtMessage();
+                }
+            })
+        }
 
     }
     );
@@ -42,14 +82,14 @@
             <option value="">Menyvalg 3</option>
         </select>
     </div>
+    <ul class="chatbox">
+        <li class="chat_incoming">
 
-    <div class="chatbox">
-        <h2>Chat with us!</h2>
-        <div class="messages">
-            <!-- Messages will appear here -->
-        </div>
-        <input type="text" class="user_input" placeholder="Type your message..." />
-        <button class="sendBtn">Send</button>
+        </li>
+    </ul>
+    <div class="input-container">
+        <input type="text" class="user_input" placeholder="Skriv meldingen din her...">
+        <button class="sendBtn" title="Send melding" type="button">➤</button>
     </div>
 
 
@@ -91,6 +131,11 @@
     margin-left: auto;
     margin-right: auto;
     display: block;
+}
+.input-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
 }
 .resetBtn {
     position: fixed;
