@@ -214,7 +214,7 @@ h1 {
 }
 .resetBtn {
     position: fixed;
-    margin-top: 90px;
+    margin-top: 100px;
     left: 10px;
     height: 30px;
     width: 30px;
@@ -274,18 +274,6 @@ h1 {
     width: calc(99% - 200px);
 }
 .input-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
-.resetBtn {
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
-
-}
-
-.input-container {
     position: absolute;
     top:92%;
     left: 27%;
@@ -298,14 +286,21 @@ h1 {
     max-width: 50%;
     height: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-
+    z-index: 9999;
+    display: flex;
+    align-items: center;
 }
 .user_input {
     width: 90%;
     outline: none;
-    border-style: none;
-
-    background-color: var(--color-gran-10);
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    background-color: transparent;
+    cursor: text;
+    pointer-events: auto;
+    z-index: 10000;
+    position: relative;
 }
 .sendBtn {
     width: 40px;
@@ -317,7 +312,7 @@ h1 {
     align-items: center;
     justify-content: center;
     margin-top: 5px;
-    margin-left: 35px;
+    margin-left: 40px;
     background-color: var(--color-gran-30);
     transition: background-color 0.3s;
     }
@@ -407,12 +402,5 @@ h1 {
 
     
         } 
-
-
-        .sidebar {
-       
-        }
 }
-
-
 </style>
