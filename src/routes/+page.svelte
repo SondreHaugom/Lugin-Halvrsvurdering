@@ -126,6 +126,7 @@
 
 <div class="chatbot_wrapper" class:shifted={isMenuOpen}>
     <ul class="chatbox">
+
         <li class="chat_incoming">
 
         </li>
@@ -220,6 +221,7 @@ h1 {
     top: 30px;
     left: 30%;
     width: 38%;
+    max-width: 38%;
     height: 850px;
     z-index: 2000;
     
@@ -231,6 +233,7 @@ h1 {
     position: absolute;
     top: 10px;
     width: 97.03%;
+    max-width: 97.03%;
     height: 98%;
     border-radius: 5px;
     margin-left: 50px;
@@ -265,6 +268,7 @@ h1 {
     border-radius: 5px;
     background-color: var(--color-gran-10);
     width: 40%;
+    max-width: 40%;
     height: 40px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
@@ -280,20 +284,19 @@ h1 {
     width: 35px;
     height: 35px;
     border-radius: 100%;
-    border-style: solid 1px;
+    border-style: solid;
     border-width: 1px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 3px;
-    margin-left: 35px;
+    margin-left: 25px;
     background-color: var(--color-gran-30);
     transition: background-color 0.3s;
     }
     .sendBtn:hover {
         background-color: var(--color-gran-50);
     }
-
     :global(.chat_incoming), :global(.chat_outgoing) {
         list-style-type: none;
         padding: 0;
@@ -319,7 +322,7 @@ h1 {
         padding: 10px;
         border-radius: 10px;
         margin: 10px;
-        max-width: 40%;
+        max-width: 60%;
         align-self: flex-start;
         display: block;
         margin-right: auto;
