@@ -1,6 +1,6 @@
 export const selectAgent = async (message, agentType) => {
-    let endpoint = '/mistralai';
-    if (agentType === 'openai') endpoint = '/openai';
+    let endpoint = '/Mistralai';
+    if (agentType === 'Openai') endpoint = '/Openai';
 
     console.log(`Sending message to ${agentType} endpoint:`);
 

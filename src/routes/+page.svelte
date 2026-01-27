@@ -6,13 +6,21 @@
 
     // deklarerer globale variabler
     let chatbox, userInput, sendBtn, resetBtn, toggleBtn, selectBtn;
+    let currentAgent = "mistralai"; // Standard agent
 
     // variabel for å spore menyens tilstand
     let isMenuOpen = true;
 
+    // vis menyen basert på skjermstørrelse
+    if (typeof window !== 'undefined' && window.innerWidth < 600) {
+        isMenuOpen = false;
+    }
+
     // funksjon for å åpne/lukke menyen
     const sidebar = () => {
         isMenuOpen = !isMenuOpen;
+
+
     }
 
     // funksjo|n for å opprette og legge til meldinger i chatboksen
@@ -101,32 +109,40 @@
             })
         }
 
+        if (selectBtn) {
+            selectBtn.addEventListener("change", () => {
+                currentAgent = selectBtn.value;
+            });
+        }
+
     }
     );
 
 </script>
+
 <head>
+
     <title>Lugin</title>
 </head>
 
 
 <main>
-    <img class="logo" src="/src/lib/logo/artificial intelligence - Logo2.png" alt="">
+    <img class="logo" title="Lugin" src="/src/lib/logo/artificial intelligence - Logo2.png" alt="">
     <button class="sidebar-btn" title="Åpne/lukk meny" on:click={sidebar} type="button">☰</button>
     <button class="resetBtn" title="Ny Samtale" type="button">⟳</button>
     <div class="sidebar" class:open={isMenuOpen}>
         <h1>
             Lugin
         </h1>
-        <select class="select-btn" name="" id="">
-            <option value="mistralai">MistralAI</option>
-            <option value="openai">OpenAI</option>
+        <select title="Velg agent" class="select-btn" name="" id="">
+            <option value="Mistralai">MistralAI</option>
+            <option value="Openai">OpenAI</option>
         </select>
     </div>
 
 <div class="chatbot_wrapper" class:shifted={isMenuOpen}>
     <ul class="chatbox">
-
+        <div class="current-agent">{currentAgent}</div>
         <li class="chat_incoming">
 
         </li>
@@ -229,13 +245,13 @@ h1 {
 .chatbox {
     position: absolute;
     top: 30px;
-    left: 30%;
-    width: 38%;
+    left: 27%;
+    width: 47.5%;
     overflow-y: auto;
-    max-width: 38%;
+    max-width: 50%;
     height: 850px;
     z-index: 2000;
-    
+
 
 }
 
@@ -272,15 +288,15 @@ h1 {
 .input-container {
     position: absolute;
     top:92%;
-    left: 30%;
+    left: 27%;
     border-style: solid;
     border-width: 1px;
     border-color: #333;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: var(--color-gran-10);
-    width: 40%;
-    max-width: 40%;
-    height: 40px;
+    width: 50%;
+    max-width: 50%;
+    height: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
 }
@@ -292,16 +308,16 @@ h1 {
     background-color: var(--color-gran-10);
 }
 .sendBtn {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     border-radius: 100%;
     border-style: solid;
     border-width: 1px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 3px;
-    margin-left: 25px;
+    margin-top: 5px;
+    margin-left: 35px;
     background-color: var(--color-gran-30);
     transition: background-color 0.3s;
     }
@@ -331,13 +347,72 @@ h1 {
     :global(.bot_message) {
         color: black;
         padding: 10px;
-        border-radius: 10px;
         margin: 10px;
         max-width: 60%;
-        align-self: flex-start;
+        align-self: flex-end;
         display: block;
-        margin-right: auto;
     }
+
+    .current-agent {
+        background-color: var(  --color-himmel-10);
+        width: 20%;
+        text-align: center;
+        font-size: 17px;
+        border-radius: 5px;
+        border-style: solid;
+        border-width: 1px;
+        border-color: #333;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+
+    @media (min-width: 300px) and (max-width: 600px) {
+        .chatbox {
+            left: 21%;
+            max-height: 80%;
+            max-width: 70%;
+            overflow-y: auto;
+
+
+        }
+        .input-container {
+            left: 5%;
+            height: 40px;
+            width: 90%;
+            max-width: 90%;
+        }
+        .chatbot_wrapper {
+            width: 83%;
+        }
+        .chatbot_wrapper.shifted {
+            margin-left: 510px;
+            width: calc(99% - 200px);
+        }
+        .sendBtn {
+            width: 30px;
+            height: 30px; 
+            margin-right: 2px;         
+        }
+         :global(.user_message) {
+            font-size: 12px;
+            margin-left: 50%;
+        }  
+        :global(.bot_message) {
+            position: absolute;
+            right: 80px;
+            top: 80px;
+
+    
+        } 
+
+
+        .sidebar {
+       
+        }
+}
 
 
 </style>
