@@ -219,10 +219,13 @@ h1 {
 .chatbox {
     width: 80%;
     height: 850px;
+    position: relative
+    mar;
     margin-left: auto;
     margin-right: auto;
     display: block;
     z-index: 2000;
+    background-color: aqua;
     
 
 }
