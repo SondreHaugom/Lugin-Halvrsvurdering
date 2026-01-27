@@ -111,7 +111,7 @@
 
 
 <main>
-    <img class="logo" src="/src/lib/logo/artificial intelligence.png" alt="">
+    <img class="logo" src="/src/lib/logo/artificial intelligence - Logo2.png" alt="">
     <button class="sidebar-btn" title="Åpne/lukk meny" on:click={sidebar} type="button">☰</button>
     <button class="resetBtn" title="Ny Samtale" type="button">⟳</button>
     <div class="sidebar" class:open={isMenuOpen}>
@@ -231,6 +231,7 @@ h1 {
     top: 30px;
     left: 30%;
     width: 38%;
+    overflow-y: auto;
     max-width: 38%;
     height: 850px;
     z-index: 2000;
@@ -314,14 +315,14 @@ h1 {
     }
     :global(.user_message) {
         background-color: var(--color-himmel-10);
-        text-align: right;
+        text-align: left;
         color: black;
         padding: 10px;
         border-radius: 10px;
         border-bottom-right-radius: 1px;
         margin: 10px;
         width: auto;
-        max-width: 20%;
+        max-width: 60%;
         align-self: flex-end;
         display: block;
         margin-left: auto;
