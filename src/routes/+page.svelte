@@ -58,7 +58,7 @@
         if (inputmessage === "") return;
         // viser brukerens melding i chatboksen
         createChatMessage(inputmessage, 'chat_outgoing');
-        createChatMessage('Genererer respons...', 'chat_incoming');
+        createChatMessage(selectBtn.value, 'chat_incoming');
         
         // henter valgt agent fra dropdown-menyen
         const selectedAgent = selectBtn.value;
@@ -125,7 +125,6 @@
     </div>
 
 <div class="chatbot_wrapper" class:shifted={isMenuOpen}>
-
     <ul class="chatbox">
         <li class="chat_incoming">
 
@@ -217,24 +216,22 @@ h1 {
 }
 
 .chatbox {
-    width: 80%;
+    position: absolute;
+    top: 30px;
+    left: 30%;
+    width: 38%;
     height: 850px;
-    position: relative
-    mar;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
     z-index: 2000;
-    background-color: aqua;
     
 
 }
 
 .chatbot_wrapper {
     transition: margin-left 0.4s cubic-bezier(.77,.2,.05,1.0), width 0.4s cubic-bezier(.77,.2,.05,1.0);
-    position: relative;
+    position: absolute;
+    top: 10px;
     width: 97.03%;
-    padding-bottom: 80px;
+    height: 98%;
     border-radius: 5px;
     margin-left: 50px;
     display: block;
@@ -259,6 +256,9 @@ h1 {
 }
 
 .input-container {
+    position: absolute;
+    top:92%;
+    left: 30%;
     border-style: solid;
     border-width: 1px;
     border-color: #333;
@@ -267,8 +267,6 @@ h1 {
     width: 40%;
     height: 40px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    margin-left: auto;
-    margin-right: auto;
 
 }
 .user_input {
@@ -314,6 +312,7 @@ h1 {
         align-self: flex-end;
         display: block;
         margin-left: auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     :global(.bot_message) {
         color: black;
