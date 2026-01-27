@@ -85,6 +85,14 @@
             sendBtn.addEventListener("click", sendtMessage);
         }
 
+
+        if (resetBtn) {
+            resetBtn.addEventListener("click", () => {
+                chatbox.innerHTML = '';
+                alert("Ny samtale startet!");
+            });
+        }
+
         if (userInput) {
             userInput.addEventListener("keypress", (e) => {
                 if (e.key === "Enter") {
@@ -97,67 +105,143 @@
     );
 
 </script>
-
 <head>
     <title>Lugin</title>
 </head>
-    <button class="sidebar-btn" title="Åpne/lukk meny" type="button">☰</button>
+
+
+<main>
+    
+    <button class="sidebar-btn" title="Åpne/lukk meny" on:click={sidebar} type="button">☰</button>
     <button class="resetBtn" title="Ny Samtale" type="button">⟳</button>
-    <div class="sidebar">
+    <div class="sidebar" class:open={isMenuOpen}>
+        <h1>
+            Lugin
+        </h1>
         <select class="select-btn" name="" id="">
             <option value="mistralai">MistralAI</option>
             <option value="openai">OpenAI</option>
         </select>
     </div>
+
+<div class="chatbot_wrapper" class:shifted={isMenuOpen}>
+
     <ul class="chatbox">
         <li class="chat_incoming">
 
         </li>
+        
     </ul>
     <div class="input-container">
         <input type="text" class="user_input" placeholder="Skriv meldingen din her...">
-        <button class="sendBtn" title="Send melding" type="button">➤</button>
+        <button class="sendBtn" title="Send melding" type="button">↑</button>
     </div>
+</div>
 
-
+</main>
 
 <style>
+
+main {
+    background-color: var(--color-himmel-10);
+    width: 100%;
+    height: 100vh;
+    overflow-x: hidden;
+}
+h1 {
+    text-align: center;
+    font-family: Helvetica, Arial, sans-serif;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 .sidebar {
     position: fixed;
     top: 0;
     left: 0;
     width: 200px;
     height: 100%;
-    background-color: #f4f4f4;
-    border-right: 1px solid #ccc;
     padding: 10px;
-    box-sizing: border-box; 
+    box-sizing: border-box;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(.77,.2,.05,1.0); 
+}
+.sidebar.open {
+    transform: translate(0);
 }
 .sidebar-btn {
     position: fixed;
-    top: 10px;
+    top: 20px;
     left: 10px;
+    height: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    background-color: #007BFF;
-    color: white;
+    background-color: var( --color-gran-30);
+    color: black;
     border: none;
-    padding: 10px;
+    padding: 5px 10px;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+.sidebar-btn:hover {
+    background-color: var( --color-gran-50);
+}
+.resetBtn {
+    position: fixed;
+    margin-top: 50px;
+    left: 10px;
+    height: 30px;
+    width: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    background-color: var( --color-gran-30);
+    color: black;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.resetBtn:hover {
+    background-color: var( --color-gran-50);
 }
 .select-btn {
     width: 100%;
     padding: 10px;
-    margin-top: 40px;
+    margin-top: 30px;
     box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: var(--color-gran-30);
 }
 
 .chatbox {
-    background-color: aqua;
-    width: 300px;
-    height: 400px;
+    width: 80%;
+    height: 850px;
     margin-left: auto;
     margin-right: auto;
     display: block;
+    z-index: 2000;
+    
+
+}
+
+.chatbot_wrapper {
+    transition: margin-left 0.4s cubic-bezier(.77,.2,.05,1.0), width 0.4s cubic-bezier(.77,.2,.05,1.0);
+    position: relative;
+    width: 97.03%;
+    padding-bottom: 80px;
+    border-radius: 5px;
+    margin-left: 50px;
+    display: block;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+.chatbot_wrapper.shifted {
+    margin-left: 210px;
+    width: calc(99% - 200px);
 }
 .input-container {
     display: flex;
@@ -165,11 +249,79 @@
     margin-top: 10px;
 }
 .resetBtn {
-    position: fixed;
     top: 10px;
     right: 10px;
     z-index: 1000;
 
 }
+
+.input-container {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #333;
+    border-radius: 5px;
+    background-color: var(--color-gran-10);
+    width: 40%;
+    height: 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-left: auto;
+    margin-right: auto;
+
+}
+.user_input {
+    width: 90%;
+    outline: none;
+    border-style: none;
+
+    background-color: var(--color-gran-10);
+}
+.sendBtn {
+    width: 35px;
+    height: 35px;
+    border-radius: 100%;
+    border-style: solid 1px;
+    border-width: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+    margin-left: 35px;
+    background-color: var(--color-gran-30);
+    transition: background-color 0.3s;
+    }
+    .sendBtn:hover {
+        background-color: var(--color-gran-50);
+    }
+
+    :global(.chat_incoming), :global(.chat_outgoing) {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    :global(.user_message) {
+        background-color: var(--color-himmel-10);
+        text-align: right;
+        color: black;
+        padding: 10px;
+        border-radius: 10px;
+        border-bottom-right-radius: 1px;
+        margin: 10px;
+        width: auto;
+        max-width: 20%;
+        align-self: flex-end;
+        display: block;
+        margin-left: auto;
+    }
+    :global(.bot_message) {
+        color: black;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 10px;
+        max-width: 40%;
+        align-self: flex-start;
+        display: block;
+        margin-right: auto;
+    }
+
 
 </style>
