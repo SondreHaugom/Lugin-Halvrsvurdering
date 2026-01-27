@@ -111,7 +111,7 @@
 
 
 <main>
-    
+    <img class="logo" src="/src/lib/logo/artificial intelligence.png" alt="">
     <button class="sidebar-btn" title="Åpne/lukk meny" on:click={sidebar} type="button">☰</button>
     <button class="resetBtn" title="Ny Samtale" type="button">⟳</button>
     <div class="sidebar" class:open={isMenuOpen}>
@@ -151,7 +151,7 @@ main {
 h1 {
     text-align: center;
     font-family: Helvetica, Arial, sans-serif;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 20px;
 }
 .sidebar {
@@ -170,7 +170,7 @@ h1 {
 }
 .sidebar-btn {
     position: fixed;
-    top: 20px;
+    top: 60px;
     left: 10px;
     height: 30px;
     border-radius: 5px;
@@ -183,12 +183,22 @@ h1 {
     cursor: pointer;
     transition: background-color 0.3s;
 }
+.logo {
+    position: fixed;
+    top: 20px;
+    left: 10px;
+    height: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+
+}
 .sidebar-btn:hover {
     background-color: var( --color-gran-50);
 }
 .resetBtn {
     position: fixed;
-    margin-top: 50px;
+    margin-top: 90px;
     left: 10px;
     height: 30px;
     width: 30px;
@@ -208,7 +218,7 @@ h1 {
 .select-btn {
     width: 100%;
     padding: 10px;
-    margin-top: 30px;
+    margin-top: 65px;
     box-sizing: border-box;
     border-radius: 5px;
     border: 1px solid #ccc;
