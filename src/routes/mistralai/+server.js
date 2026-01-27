@@ -1,19 +1,13 @@
 import { Mistral } from "@mistralai/mistralai";
-import {env} from '$env/dynamic/private';
+import { env } from '$env/dynamic/private';
 import { json } from '@sveltejs/kit';
-import { MISTRAL_API_KEY } from "$env/static/private";
-
-const api_key = env.MISTRAL_API_KEY
 
 const client = new Mistral({
-    apiKey: api_key
+    apiKey: env.MISTRAL_API_KEY
 });
 
-let conversationHistory = [
-    { role: "system", content: "You are a helpful assistant." }
-]
 
-let tools = [
+const tools = [
     {
         type: 'function',
         function: {
@@ -25,49 +19,77 @@ let tools = [
                     transactionId: {
                         type: 'string',
                         description: 'The ID of the transaction'
-                    },
+                    }
                 },
-                required: ['transactionId'],
-            },
-        },
-    },
+                required: ['transactionId']
+            }
+        }
+    }
 ];
 
+const chuck_norris_joke = async (transactionId) => {
+    if (!transactionId) throw new Error("transactionId is required");
 
-const huck_norris_joke = async (transactionId) => {
-    const apiUrl = "https://api.chucknorris.io/jokes/random";
-    if (!transactionId) {
-        throw new Error("transactionId is required");
-    } else {
-        const response = await fetch(apiUrl);
-        const joke = await response.json();
-        return joke.value;
-    }
+    const response = await fetch("https://api.chucknorris.io/jokes/random");
+    const joke = await response.json();
+    return joke.value;
 };
 
-
-/** @type {import('./$types').RequestHandler} */
-
-export async function POST(request) {
+export async function POST({ request }) {
     try {
-        const {message} = await request.request.json();
-        console.log("Message received on server:", message);
+        const { message } = await request.json();
+const conversationHistory = [
+            { role: "system", content: "You are a helpful assistant." },
+            { role: "user", content: message }
+        ];
+        console.log("Message received:", message);
 
         conversationHistory.push({ role: "user", content: message });
 
-        const respons = await client.chat.complete({
+        let response = await client.chat.complete({
             model: "mistral-large-2512",
             messages: conversationHistory,
-
+            tools: tools
         });
-        conversationHistory.push({ role: "assistant", content: respons.choices[0].message.content });
-        let reply = respons.choices[0].message.content;
 
-        while (assistantMessage.toolCalls && assistantMessage.toolCalls.length > 0) {
-            const toolcalls = [];
+        let assistantMessage = response.choices[0].message;
+
+        while (assistantMessage.toolCalls?.length) {
+            for (const toolCall of assistantMessage.toolCalls) {
+                if (toolCall.function.name === 'chuck_norris_joke') {
+                    const args = JSON.parse(toolCall.function.arguments);
+
+                    const toolResult = await chuck_norris_joke(args.transactionId);
+
+                    conversationHistory.push({
+                        role: 'tool',
+                        tool_call_id: toolCall.id,
+                        name: toolCall.function.name,
+                        content: toolResult
+                    });
+                }
+            }
+
+            response = await client.chat.complete({
+                model: "mistral-large-2512",
+                messages: conversationHistory,
+                tools
+            });
+
+            assistantMessage = response.choices[0].message;
         }
+
+        conversationHistory.push({
+            role: "assistant",
+            content: assistantMessage.content
+        });
+        const finalContent =
+         assistantMessage.content ?? 'Agenten fullførte uten tekstlig svar.';
+
+return json({ response: finalContent });
+
     } catch (error) {
-        console.error("Error in MistralAI request:", error);
+        console.error("Error:", error);
         return json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
