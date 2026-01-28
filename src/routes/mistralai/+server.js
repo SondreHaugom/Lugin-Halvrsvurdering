@@ -15,9 +15,17 @@ export async function POST({ request }) {
         const { message: userMessage } = await request.json();
         message.push({ "role": "user", "content": userMessage });
 
-        const response = 
+        const response = client.chat.complete({
+            model: "mistral-large-2512",
+            messages: message,
+
+        })
+        message.push({ "role": "assistant", "content": (await response).choices[0].message.content });
+
+        return json({ response: (await response).choices[0].message.content });
+    } catch (error) {
+        console.error('Error in Mistrakai +server.js:', error);
+        return json({ error: 'An error occurred while processing your request.' }, { status: 500 });
     }
-
-
-}
+};
 
