@@ -6,6 +6,25 @@ const client = new Mistral({
     apiKey: env.MISTRAL_API_KEY
 });
 
+
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "chuck_norris_joke",
+      description: "Get a random Chuck Norris joke",
+      parameters: {type: "object", properties: {}, required: []}
+    }
+  }
+];
+
+const chuck_norris_joke = () => {
+    const apiUrl = fetch("https://api.chucknorris.io/jokes/random");
+    return apiUrl.then(response => response.json())
+        .then(data => data.value)
+        .catch(error => "Could not fetch joke at this time.");
+}
+
 let message = [
     {"role": "system", "content": "You are a helpful assistant. Use chuck_norris_joke when needed."}
 ];
