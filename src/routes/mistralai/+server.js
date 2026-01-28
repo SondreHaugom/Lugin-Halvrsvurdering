@@ -34,13 +34,15 @@ const chuck_norris_joke = async () => {
 export async function POST({ request }) {
     try {
         const { message } = await request.json();
+        console.log("Incoming message:", message);
+
         const conversationHistory = [
-            { role: "system", content: "You are a helpful assistant." },
+            {
+                role: "system",
+                content: "You are a helpful assistant. WHENEVER the user asks for a joke, ALWAYS use the chuck_norris_joke function to get a Chuck Norris joke."
+            },
             { role: "user", content: message }
         ];
-
-        
-        console.log("Message received:", message);
 
         let response = await client.chat.complete({
             model: "mistral-large-2512",
@@ -49,23 +51,14 @@ export async function POST({ request }) {
         });
 
         let assistantMessage = response.choices[0].message;
-
-        let toolCalls = assistantMessage.tool_calls || [];
+        let toolCalls = assistantMessage.toolCalls || [];
 
         while (toolCalls.length > 0) {
-
             conversationHistory.push(assistantMessage);
 
             for (const toolCall of toolCalls) {
-                if (!toolCall.id) {
-                    throw new Error("Mistral returned tool_call without id");
-                } 
-
                 if (toolCall.function.name === 'chuck_norris_joke') {
-
                     const toolResult = await chuck_norris_joke();
-                    console.log("Tool result:", toolResult);
-
                     conversationHistory.push({
                         role: 'tool',
                         tool_call_id: toolCall.id,
@@ -79,19 +72,18 @@ export async function POST({ request }) {
                 messages: conversationHistory,
                 tools: tools
             });
-            
+
             assistantMessage = response.choices[0].message;
             toolCalls = assistantMessage.tool_calls || [];
         }
 
-        // Push final assistant message and return
         conversationHistory.push(assistantMessage);
-        
-        const finalContent = assistantMessage.content || 'Beklager, ingen respons mottatt.';
+        const finalContent = assistantMessage.content || 'No response received.';
         return json({ response: finalContent });
-        
+
     } catch (error) {
         console.error("Error:", error);
         return json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
+

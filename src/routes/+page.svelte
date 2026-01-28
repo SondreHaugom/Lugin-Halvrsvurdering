@@ -79,15 +79,14 @@
     }
 
 
-
-
-    onMount(() => {
+    onMount((async () => {
         chatbox = document.querySelector(".chatbox");
         userInput = document.querySelector(".user_input");
         sendBtn = document.querySelector(".sendBtn");
         resetBtn = document.querySelector(".resetBtn");
         toggleBtn = document.querySelector(".sidebar-btn");
         selectBtn = document.querySelector(".select-btn");
+
 
         if (sendBtn) {
             sendBtn.addEventListener("click", sendtMessage);
@@ -116,7 +115,7 @@
         }
 
     }
-    );
+    ));
 
 </script>
 
