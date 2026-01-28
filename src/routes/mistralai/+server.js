@@ -5,10 +5,6 @@ import { json } from '@sveltejs/kit';
 const client = new Mistral({
     apiKey: env.MISTRAL_API_KEY
 });
-const conversationHistory = [
-    { role: "system", content: "You are a helpful assistant." }
-];
-
 
 const tools = [
     {
@@ -19,10 +15,6 @@ const tools = [
             parameters: {
                 type: 'object',
                 properties: {
-                    transactionId: {
-                        type: 'string',
-                        description: 'The ID of the transaction'
-                    }
                 },
                 required: [],
             },
@@ -42,10 +34,13 @@ const chuck_norris_joke = async () => {
 export async function POST({ request }) {
     try {
         const { message } = await request.json();
+        const conversationHistory = [
+            { role: "system", content: "You are a helpful assistant." },
+            { role: "user", content: message }
+        ];
+
         
         console.log("Message received:", message);
-
-        conversationHistory.push({ role: "user", content: message });
 
         let response = await client.chat.complete({
             model: "mistral-large-2512",
@@ -55,41 +50,46 @@ export async function POST({ request }) {
 
         let assistantMessage = response.choices[0].message;
 
-        while (assistantMessage.toolCalls?.length) {
-            for (const toolCall of assistantMessage.toolCalls) {
+        let toolCalls = assistantMessage.tool_calls || [];
+
+        while (toolCalls.length > 0) {
+
+            conversationHistory.push(assistantMessage);
+
+            for (const toolCall of toolCalls) {
+                if (!toolCall.id) {
+                    throw new Error("Mistral returned tool_call without id");
+                } 
+
                 if (toolCall.function.name === 'chuck_norris_joke') {
-                    const args = JSON.parse(toolCall.function.arguments);
 
                     const toolResult = await chuck_norris_joke();
+                    console.log("Tool result:", toolResult);
 
                     conversationHistory.push({
                         role: 'tool',
                         tool_call_id: toolCall.id,
-                        name: toolCall.function.name,
                         content: toolResult
                     });
-                    
                 }
             }
 
             response = await client.chat.complete({
                 model: "mistral-large-2512",
                 messages: conversationHistory,
-                tools
+                tools: tools
             });
-
+            
             assistantMessage = response.choices[0].message;
+            toolCalls = assistantMessage.tool_calls || [];
         }
 
-        conversationHistory.push({
-            role: "assistant",
-            content: assistantMessage.content
-        });
-        const finalContent =
-         assistantMessage.content ?? 'Agenten fullførte uten tekstlig svar.';
-
-return json({ response: finalContent });
-
+        // Push final assistant message and return
+        conversationHistory.push(assistantMessage);
+        
+        const finalContent = assistantMessage.content || 'Beklager, ingen respons mottatt.';
+        return json({ response: finalContent });
+        
     } catch (error) {
         console.error("Error:", error);
         return json({ error: 'Internal Server Error' }, { status: 500 });
