@@ -37,13 +37,44 @@ export async function POST({ request }) {
         const response = client.chat.complete({
             model: "mistral-large-2512",
             messages: message,
+            tools: tools,
 
-        })
-        message.push({ "role": "assistant", "content": (await response).choices[0].message.content });
+        });
 
-        return json({ response: (await response).choices[0].message.content });
+        let assistantMessage = (await response).choices[0].message.content;
+
+        while (assistantMessage.tool_calls.length > 0) {
+            message.push({assistantMessage})
+
+            for (const tc of assistantMessage.tool_calls) {
+                if (!tc.id) {
+                    throw new Error("tool_call mangler id!");
+                }
+                if (tc.function.name === "chuck_norris_joke") {
+                    console.log("---> kaller funksjon:", tc.function.name);
+                    const joke = chuck_norris_joke();
+                    message.push({
+                        "role": "tool",
+                        "name": "chuck_norris_joke",
+                        "content": await joke
+                    })
+                }
+            }
+            const response = client.chat.complete({
+                model: "mistral-large-2512",
+                messages: message,
+                tools: tools,
+            })
+            assistantMessage = (await response).choices[0].message;
+
+        }
+
+        message.push(assistantMessage);
+        return json({ response: assistantMessage.content } );
+
+
     } catch (error) {
-        console.error('Error in Mistrakai +server.js:', error);
+        console.error('Error in Mistralai +server.js:', error);
         return json({ error: 'An error occurred while processing your request.' }, { status: 500 });
     }
 };
