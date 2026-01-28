@@ -5,6 +5,9 @@ import { json } from '@sveltejs/kit';
 const client = new Mistral({
     apiKey: env.MISTRAL_API_KEY
 });
+const conversationHistory = [
+    { role: "system", content: "You are a helpful assistant." }
+];
 
 
 const tools = [
@@ -21,27 +24,25 @@ const tools = [
                         description: 'The ID of the transaction'
                     }
                 },
-                required: ['transactionId']
-            }
-        }
-    }
+                required: [],
+            },
+        },
+    },
 ];
+console.log("Tools defined:", tools);
 
-const chuck_norris_joke = async (transactionId) => {
-    if (!transactionId) throw new Error("transactionId is required");
+const chuck_norris_joke = async () => {
 
     const response = await fetch("https://api.chucknorris.io/jokes/random");
     const joke = await response.json();
+    console.log("Joke fetched:", joke);
     return joke.value;
 };
 
 export async function POST({ request }) {
     try {
         const { message } = await request.json();
-const conversationHistory = [
-            { role: "system", content: "You are a helpful assistant." },
-            { role: "user", content: message }
-        ];
+        
         console.log("Message received:", message);
 
         conversationHistory.push({ role: "user", content: message });
@@ -59,7 +60,7 @@ const conversationHistory = [
                 if (toolCall.function.name === 'chuck_norris_joke') {
                     const args = JSON.parse(toolCall.function.arguments);
 
-                    const toolResult = await chuck_norris_joke(args.transactionId);
+                    const toolResult = await chuck_norris_joke();
 
                     conversationHistory.push({
                         role: 'tool',
@@ -67,6 +68,7 @@ const conversationHistory = [
                         name: toolCall.function.name,
                         content: toolResult
                     });
+                    
                 }
             }
 
