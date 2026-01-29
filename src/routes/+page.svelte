@@ -262,6 +262,9 @@ h1 {
     max-width: 97.03%;
     height: 98%;
     border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--color-stein-50);
     margin-left: 50px;
     display: block;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -278,8 +281,8 @@ h1 {
     left: 27%;
     border-style: solid;
     border-width: 1px;
-    border-color: #333;
-    border-radius: 10px;
+    border-color: var(--color-stein-50);
+    border-radius: 5px;
     background-color: var(--color-himmel-10);
     width: 50%;
     max-width: 50%;
@@ -294,6 +297,7 @@ h1 {
     margin-left: 5px;
     outline: none;
     border-style: solid;
+    border-color: var(--color-stein-50);
     border-width: 1px;
     border-radius: 5px;
     padding: 10px;
@@ -314,6 +318,7 @@ h1 {
     height: 40px;
     border-radius: 100%;
     border-style: solid;
+    border-color: var(--color-stein-50);
     border-width: 1px;
     display: flex;
     align-items: center;
@@ -321,15 +326,15 @@ h1 {
     margin-left: 15px;
     background-color: var(--color-gran-30);
     transition: background-color 0.3s;
-    }
+}
     .sendBtn:hover {
         background-color: var(--color-gran-50);
-    }
+}
     :global(.chat_incoming), :global(.chat_outgoing) {
         list-style-type: none;
         padding: 0;
         margin: 0;
-    }
+}
     :global(.user_message) {
         background-color: var(--color-himmel-10);
         text-align: left;
@@ -344,7 +349,7 @@ h1 {
         display: block;
         margin-left: auto;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+}
     :global(.bot_message) {
         color: black;
         padding: 10px;
@@ -352,7 +357,7 @@ h1 {
         max-width: 60%;
         align-self: flex-end;
         display: block;
-    }
+}
 
     .current-agent {
         background-color: var(  --color-himmel-10);
@@ -369,7 +374,7 @@ h1 {
         margin-right: auto;
         display: block;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+}
 
 
     @media (min-width: 300px) and (max-width: 600px) {
@@ -387,12 +392,68 @@ h1 {
             width: 90%;
             max-width: 90%;
         }
+        .user_input {
+            width: 85%;
+            right: 3px;
+            font-size: 14px;
+        }
         .chatbot_wrapper {
-            width: 83%;
+            width: 85%;
         }
         .chatbot_wrapper.shifted {
             margin-left: 510px;
             width: calc(99% - 200px);
+        }
+        .current-agent {
+            width: 50%;
+        }
+        .sendBtn {
+            width: 30px;
+            height: 30px; 
+            margin-right: 2px;         
+        }
+         :global(.user_message) {
+            font-size: 12px;
+            margin-left: 50%;
+        }  
+        :global(.bot_message) {
+            position: absolute;
+            right: 80px;
+            top: 80px;
+
+    
+        } 
+}
+
+@media (min-width: 601px) and (max-width: 1200px) {
+            .chatbox {
+            left: 21%;
+            max-height: 80%;
+            max-width: 70%;
+            overflow-y: auto;
+
+
+        }
+        .input-container {
+            left: 5%;
+            height: 40px;
+            width: 90%;
+            max-width: 90%;
+        }
+        .user_input {
+            width: 85%;
+            right: 3px;
+            font-size: 14px;
+        }
+        .chatbot_wrapper {
+            width: 92%;
+        }
+        .chatbot_wrapper.shifted {
+            margin-left: 200px;
+            width: calc(99% - 200px);
+        }
+        .current-agent {
+            width: 50%;
         }
         .sendBtn {
             width: 30px;
