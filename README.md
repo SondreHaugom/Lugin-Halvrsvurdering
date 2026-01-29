@@ -23,7 +23,6 @@ En prototype av en chattetjeneste for alle ansatte i Telemark Fylkeskommune.
 - [Arkitektur-prinsipper](#-Arkitektur-prinsipper)
 - [Biblioteker og begrunnelse](#-Biblioteker og begrunnelse)
 - [Installasjon og oppsett](#-Installasjon og oppsett)
-- [Bruk](#-Bruk)
 - [Sikkerhet og personvern](#-Sikkerhet og personvern)
 
 
@@ -135,3 +134,75 @@ Lugin-Halvrsvurdering/
 
 
 ## Installasjon og oppsett
+## 🧰 Installasjon og oppsett
+
+### 📋 Forutsetninger
+
+- ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat&logo=node.js&logoColor=white)
+- ![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)
+- OpenAI API-nøkkel
+
+### 1️⃣ Kloning av repository
+
+```bash
+git clone https://github.com/ditt-brukernavn/FagAssistenten.git
+cd FagAssistenten
+```
+
+### 2️⃣ Installer avhengigheter
+
+```bash
+npm install
+```
+
+### 3️⃣ Opprett miljøvariabler
+
+Lag en `.env`-fil i prosjektroten:
+
+```env
+OPENAI_API_KEY=din_openai_api_nokkel
+# Tilleggskonfigurationer for agenter (valgfritt)
+# VECTOR_STORE_ID=din_vector_store_id  
+# INSTRUCTIONS=instruksjoner_til_botten
+```
+
+### 4️⃣ Start utviklingsserver
+
+```bash
+npm run dev
+```
+
+Åpne nettleseren på `http://localhost:5173`
+
+
+## Sikkerhet og personvern
+
+For å beskytte personvernet i dette prosjektet har jeg benyttet meg av samme løsning som det er i dagens Hugin. Med AI-leverandørene er det avtaler som zero retention avtale med Mistral og 30 dagers lagring av OpenAI. Med disse avtalene sikres det at:
+
+### 🔒 Datahåndtering
+
+- **Mistral AI**: Zero retention policy - ingen data lagres permanent
+- **OpenAI**: 30 dagers lagringspolicy før automatisk sletting
+- **Lokal lagring**: Ingen sensitiv data lagres lokalt i nettleseren
+- **API-nøkler**: Sikret gjennom miljøvariabler på serversiden
+
+### 🛡️ Sikkerhetstiltak
+
+- **Server-side API calls**: Alle forespørsler går via backend for å skjule API-nøkler
+- **Miljøvariabler**: Sensitive data eksponeres ikke til frontend
+- **HTTPS**: Kryptert kommunikasjon mellom klient og server
+- **Input validering**: Brukerinndata valideres før videresending
+
+### 📋 Personvernshensyn
+
+- **Ingen persistent lagring**: Chat-historikk lagres ikke permanent
+- **Anonymisering**: Ingen personidentifiserbar informasjon samles inn
+- **GDPR-kompatibel**: Følger retningslinjer for databehandling
+- **Transparent**: Brukere informeres om hvilken AI-leverandør som brukes
+
+### ⚠️ Anbefalinger for produksjon
+
+- Implementer logging og monitorering
+- Sett opp rate limiting for API-kall
+- Vurder ytterligere kryptering av sensitiv data
+- Gjennomfør sikkerhetsaudit før produksjonsdeploy  
