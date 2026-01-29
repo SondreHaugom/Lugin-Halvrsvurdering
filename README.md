@@ -190,19 +190,9 @@ For å beskytte personvernet i dette prosjektet har jeg benyttet meg av samme l�
 
 - **Server-side API calls**: Alle forespørsler går via backend for å skjule API-nøkler
 - **Miljøvariabler**: Sensitive data eksponeres ikke til frontend
-- **HTTPS**: Kryptert kommunikasjon mellom klient og server
-- **Input validering**: Brukerinndata valideres før videresending
 
 ### 📋 Personvernshensyn
 
 - **Ingen persistent lagring**: Chat-historikk lagres ikke permanent
 - **Anonymisering**: Ingen personidentifiserbar informasjon samles inn
-- **GDPR-kompatibel**: Følger retningslinjer for databehandling
 - **Transparent**: Brukere informeres om hvilken AI-leverandør som brukes
-
-### ⚠️ Anbefalinger for produksjon
-
-- Implementer logging og monitorering
-- Sett opp rate limiting for API-kall
-- Vurder ytterligere kryptering av sensitiv data
-- Gjennomfør sikkerhetsaudit før produksjonsdeploy  
