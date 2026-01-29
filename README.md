@@ -1,42 +1,137 @@
-# sv
+# Lugin Halvårsvurdering 
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+En prototype av en chattetjeneste for alle ansatte i Telemark Fylkeskommune. 
 
-## Creating a project
+![SvelteKit](https://img.shields.io/badge/SvelteKit-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)
+![Mistral AI](https://img.shields.io/badge/Mistral%20AI-4F8CBF?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjZmZmIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bTAgMThjLTQuNDIgMC04LTMuNTgtOC04czMuNTgtOCA4LTggOCAzLjU4IDggOC0zLjU4IDgtOCA4eiIvPjwvc3ZnPg==&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-If you're seeing this, you've probably already done this step. Congrats!
 
-```sh
-# create a new project
-npx sv create my-app
+---
+[![Svelte](https://img.shields.io/badge/Svelte-5%2B-ff3e00?logo=svelte)](https://svelte.dev)
+[![SvelteKit](https://img.shields.io/badge/SvelteKit-2%2B-ff3e00?logo=svelte)](https://kit.svelte.dev)
+[![Status](https://img.shields.io/badge/status-under%20arbeid-yellow)](#)
+
+
+## Innholdsfortegnelse
+- [Funksjoner](#-Funksjoner)
+- [Om prosjektet](#-Om prosjektet)
+- [Prosjektstruktur](#-Prosjektstruktur)
+- [Dataflyt](#-Dataflyt)
+- [Filforklaring](#-Filforklaring)
+- [Arkitektur-prinsipper](#-Arkitektur-prinsipper)
+- [Biblioteker og begrunnelse](#-Biblioteker og begrunnelse)
+- [Installasjon og oppsett](#-Installasjon og oppsett)
+- [Bruk](#-Bruk)
+- [Sikkerhet og personvern](#-Sikkerhet og personvern)
+
+
+## Funksjoner
+- **Moderne chatgrensesnitt** med Svelte
+- **Multi-agent-system** mulighet for flere agenter
+ - **Mistral Large 3** (Mistral) Generell agent for Lugin
+ - **GPT-5.1** (OpenAi) Koblet opp OpenAi som valgmulighet
+- **Bytte modell underveis** Kan bytte mellom agentene under samtalen
+- **Responsivt design** med gradient-bakgrunner og moderne styling
+- **Modulær arkitektur** med separert agent-logikk
+- **Tastaturnavigasjon** (Enter for å sende)
+
+
+
+
+
+## Om prosjektet
+
+Dette er en prototype av en chatbot som er satt opp met en multi agent arkitektur bygget med SvelteKit. Systemet lar brukeren velge mellom to ulige agenter som gir bruker mer valg muligheter etter ønsket leverandør. Man kan bytte mellom agenter underveis, men agenten vil ikke kunne kjenne igjen hva andre agenters respons. Dette er en Halvårsoppgave ettersom at jeg har vert lærling i over 6 måender. 
+
+
+
+## Prosjektstruktur
+
+```
+Lugin-Halvrsvurdering/
+├── 📁 src/                          # Hovedkildekode
+│   ├── 📄 app.html                  # HTML-mal for appen
+│   ├── 📁 lib/                      # Gjenbrukbare komponenter og utilities
+│   │   ├── 📄 index.js              # Hovedeksport fil
+│   │   ├── 📄 selectAgent.js        # 🔄 Agent-velger logikk (kobler frontend til backend)
+│   │   ├── 📁 assets/               # Statiske ressurser
+│   │   │   └── 📄 favicon.svg       # Nettstedikon
+│   │   └── 📁 logo/                 # Logoer og bilder
+│   │       ├── 📄 artificial intelligence.png
+│   │       └── 📄 artificial intelligence - Logo2.png
+│   │
+│   └── 📁 routes/                   # SvelteKit routing struktur
+│       ├── 📄 +layout.svelte        # Global layout og CSS variabler
+│       ├── 📄 +page.svelte          # Hovedside med chat-interface
+│       ├── 📁 Mistralai/            # Mistral AI API endpoint
+│       │   ├── 📄 +server.js        # Server-side API for Mistral (tool calls support)
+│       │   └── 📄 Test.py           # Python test script for Mistral API
+│       └── 📁 Openai/               # OpenAI API endpoint  
+│           └── 📄 +server.js        # Server-side API for OpenAI
+│
+├── 📁 static/                       # Statiske filer (tilgjengelig via URL)
+│   └── 📄 robots.txt               # Søkemotor instruksjoner
+│
+├── 📄 package.json                 # Prosjektavhengigheter og scripts
+├── 📄 package-lock.json            # Låst avhengighetsversioner
+├── 📄 svelte.config.js             # SvelteKit konfigurasjon
+├── 📄 vite.config.js               # Vite bundler konfigurasjon
+├── 📄 jsconfig.json                # JavaScript/TypeScript konfigurasjon
+└── 📄 README.md                    # Dette dokumentet
 ```
 
-To recreate this project with the same configuration:
+### Dataflyt
 
-```sh
-# recreate this project
-npx sv create --template minimal --no-types --install npm ./
+```
+👤 Bruker skriver melding
+    ↓
+📱 Frontend (+page.svelte)
+    ↓
+🔄 selectAgent.js (bestemmer hvilken agent)
+    ↓
+🤖 API Endpoint (/Mistralai eller /Openai)
+    ↓
+🌐 Eksterne AI API (Mistral AI / OpenAI)
+    ↓
+📝 JSON Response tilbake til frontend
+    ↓
+💬 Vises i chat-grensesnitt
 ```
 
-## Developing
+### Filforklaring
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+| Fil/Mappe | Funksjon | Type |
+|-----------|----------|------|
+| `+page.svelte` | Chat-grensesnitt, brukerinteraksjon, DOM-håndtering | 🖥️ Frontend |
+| `selectAgent.js` | Router meldinger til riktig AI-agent | 🔄 Middleware |
+| `Mistralai/+server.js` | API endpoint for Mistral AI med tool calls support | 🤖 Backend API |
+| `Openai/+server.js` | API endpoint for OpenAI GPT modeller | 🤖 Backend API |
+| `+layout.svelte` | Global styling, CSS variabler, favicon | 🎨 Layout |
+| `Test.py` | Python test script for å validere Mistral API | 🧪 Testing |
 
-```sh
-npm run dev
+### Arkitektur-prinsipper
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+- **Frontend**: Svelte/SvelteKit for reaktiv UI
+- **Backend**: SvelteKit API routes (`+server.js` filer)  
+- **Agent-system**: Modulær oppbygning hvor hver AI-leverandør har sitt eget API endpoint
+- **Responsiv design**: Mobile-first tilnærming med CSS Grid/Flexbox
+- **Tool calls**: Mistral støtter funksjonskall (f.eks. Chuck Norris vitser)
 
-## Building
 
-To create a production version of your app:
 
-```sh
-npm run build
-```
+## Biblioteker og begrunnelse
 
-You can preview the production build with `npm run preview`.
+| Import / Bibliotek           | Formål                                                                 |
+|------------------------------|------------------------------------------------------------------------|
+| `$env/dynamic/private`       | Henter miljøvariabler (API-nøkler) som ikke skal være synlige for klienten |
+| `@sveltejs/kit` (`json`)     | Returnerer JSON-responser fra server-endepunkter på standardisert måte |
+| `path`                       | Node.js-modul for håndtering av filstier på serveren               |
+| `openai`                     | OpenAI-klient for kommunikasjon med API og AI-generering |
+| `mistral`                    | MistralAI-klient for kommunikasjon med API og AI-genererin|
+| `selectLogic.js`              | Sentral routing-logikk for multi-agent systemet                    |
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+
+## Installasjon og oppsett

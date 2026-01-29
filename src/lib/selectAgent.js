@@ -2,6 +2,10 @@ export const selectAgent = async (message, agentType) => {
     let endpoint = '/Mistralai';
     if (agentType === 'Openai') endpoint = '/Openai';
 
+    if (!agentType) {
+        console.error('Agent type is not specified.');
+    }
+
     console.log(`Sending message to ${agentType} endpoint:`);
 
     const response = await fetch(endpoint, {
