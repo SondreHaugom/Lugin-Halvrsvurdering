@@ -27,7 +27,7 @@ const chuck_norris_joke = async () => {
 };
 
 
-
+// henter 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
     try {
@@ -43,15 +43,15 @@ export async function POST({ request }) {
         const response = await client.chat.complete({
             model: "mistral-large-2512",
             messages: messages,
-
+            tools: tools
         });
 
         let assistantMessage = response.choices[0].message;
 
         // Loop over tool_calls
-        while ((assistantMessage.toolCalls || []).length > 0) {
+        while ((assistantMessage.tool_calls || []).length > 0) {
             messages.push(assistantMessage); // push assistant som ba om tool
-            for (const tc of assistantMessage.toolCalls) {
+            for (const tc of assistantMessage.tool_calls) {
                 if (tc.function.name === "chuck_norris_joke") {
                     console.log("---> kaller funksjon:", tc.function.name);
                     const joke = await chuck_norris_joke();
@@ -64,12 +64,12 @@ export async function POST({ request }) {
                 }
             }
 
-            response = await client.chat.complete({
+            const newResponse = await client.chat.complete({
                 model: "mistral-large-2512",
                 messages: messages,
                 tools: tools
             });
-            assistantMessage = response.choices[0].message;
+            assistantMessage = newResponse.choices[0].message;
             
         }
         console.log("Response from MistralAI:", assistantMessage);

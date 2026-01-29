@@ -143,8 +143,8 @@
     <ul class="chatbox">
         <div class="current-agent">{currentAgent}</div>
         <li class="chat_incoming">
-
         </li>
+
         
     </ul>
     <div class="input-container">
@@ -280,7 +280,7 @@ h1 {
     border-width: 1px;
     border-color: #333;
     border-radius: 10px;
-    background-color: var(--color-gran-10);
+    background-color: var(--color-himmel-10);
     width: 50%;
     max-width: 50%;
     height: 50px;
@@ -291,15 +291,23 @@ h1 {
 }
 .user_input {
     width: 90%;
+    margin-left: 5px;
     outline: none;
-    border: none;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
     padding: 10px;
     font-size: 16px;
-    background-color: transparent;
     cursor: text;
     pointer-events: auto;
     z-index: 10000;
     position: relative;
+    background-color: white;
+    transition: box-shadow 0.3s;
+}
+.user_input:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
 }
 .sendBtn {
     width: 40px;
@@ -310,8 +318,7 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 5px;
-    margin-left: 40px;
+    margin-left: 15px;
     background-color: var(--color-gran-30);
     transition: background-color 0.3s;
     }
@@ -332,7 +339,7 @@ h1 {
         border-bottom-right-radius: 1px;
         margin: 10px;
         width: auto;
-        max-width: 60%;
+        max-width: 40%;
         align-self: flex-end;
         display: block;
         margin-left: auto;
@@ -349,10 +356,12 @@ h1 {
 
     .current-agent {
         background-color: var(  --color-himmel-10);
-        width: 20%;
+        width: 25%;
         text-align: center;
         font-size: 17px;
         border-radius: 5px;
+        border-top-left-radius: 1px;
+        border-top-right-radius: 1px;
         border-style: solid;
         border-width: 1px;
         border-color: #333;
