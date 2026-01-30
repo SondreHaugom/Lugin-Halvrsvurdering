@@ -50,6 +50,7 @@ export async function POST({ request }) {
 
         // Loop over tool_calls
         while ((assistantMessage.tool_calls || []).length > 0) {
+            console.log("Assistant requested tool call:", assistantMessage.tool_calls);
             messages.push(assistantMessage); // push assistant som ba om tool
             for (const tc of assistantMessage.tool_calls) {
                 if (tc.function.name === "chuck_norris_joke") {
@@ -61,6 +62,7 @@ export async function POST({ request }) {
                         name: tc.function.name,
                         content: joke
                     });
+                    console.log("Joke fetched from chuck_norris_joke function:", joke);
                 }
             }
 
@@ -69,11 +71,11 @@ export async function POST({ request }) {
                 messages: messages,
                 tools: tools
             });
-            assistantMessage = newResponse.choices[0].message;
-            
+            console.log("Messages", messages)
+            console.log("Tools:", tools)
         }
         console.log("Response from MistralAI:", assistantMessage);
-        return json({ response: assistantMessage.content });
+        return json({ response: response.choices[0].message.content });
     } catch (error) {
         console.error("Error in Mistral request:", error);
         return json({ error: 'Internal Server Error' }, { status: 500 });
