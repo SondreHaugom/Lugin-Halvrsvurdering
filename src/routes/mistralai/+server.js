@@ -27,7 +27,7 @@ const chuck_norris_joke = async () => {
 };
 
 
-// henter 
+// skjekker hvilke type funksjon som blir kalt
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
     try {
