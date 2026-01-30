@@ -1,4 +1,5 @@
-# Lugin Halvårsvurdering 
+###
+ Lugin Halvårsvurdering 
 
 En prototype av en chattetjeneste for alle ansatte i Telemark Fylkeskommune. 
 
@@ -14,7 +15,7 @@ En prototype av en chattetjeneste for alle ansatte i Telemark Fylkeskommune.
 [![Status](https://img.shields.io/badge/status-under%20arbeid-yellow)](#)
 
 
-## Innholdsfortegnelse
+### Innholdsfortegnelse
 - [Funksjoner](#-Funksjoner)
 - [Om prosjektet](#-Om prosjektet)
 - [Prosjektstruktur](#-Prosjektstruktur)
@@ -29,7 +30,7 @@ En prototype av en chattetjeneste for alle ansatte i Telemark Fylkeskommune.
 - [Feilsøkings strategier](#-Feilsøkings strategier)
 
 
-## Funksjoner
+### Funksjoner
 - **Moderne chatgrensesnitt** med Svelte
 - **Multi-agent-system** mulighet for flere agenter
  - **Mistral Large 3** (Mistral) Generell agent for Lugin
@@ -43,13 +44,13 @@ En prototype av en chattetjeneste for alle ansatte i Telemark Fylkeskommune.
 
 
 
-## Om prosjektet
+### Om prosjektet
 
 Dette er en prototype av en chatbot som er satt opp med et multi agent arkitektur bygget med SvelteKit. Systemet lar brukeren velge mellom to ulige agenter som gir bruker mer valg muligheter etter ønsket leverandør. Man kan bytte mellom agenter underveis, men agenten vil ikke kunne kjenne igjen hva andre agenters respons. Dette er en Halvårsoppgave ettersom at jeg har vert lærling i over 6 måender. MIstral agenten skal ettervert få tilgang til funksjonskall for å gjøre det mulig for agenten til å benytte seg av innformasjon utenfor dens treningsdata. 
 
 
 
-## Prosjektstruktur
+### Prosjektstruktur
 
 ```
 Lugin-Halvrsvurdering/
@@ -115,7 +116,7 @@ I dette prosjektet blir funksjonskall brukt sammen med Chuck Norris-API-et. Dett
 
 
 
-## Biblioteker og begrunnelse
+### Biblioteker og begrunnelse
 
 | Import / Bibliotek           | Formål                                                                 |
 |------------------------------|------------------------------------------------------------------------|
@@ -128,28 +129,29 @@ I dette prosjektet blir funksjonskall brukt sammen med Chuck Norris-API-et. Dett
 
 
 
-## Installasjon og oppsett
+### Installasjon og oppsett
 
-### Forutsetninger
+# Forutsetninger
 
 - ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat&logo=node.js&logoColor=white)
 - ![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)
 - OpenAI API-nøkkel
+- Mistral API-nøkkel
 
-### Kloning av repository
+# Kloning av repository
 
 ```bash
 git clone https://github.com/ditt-brukernavn/FagAssistenten.git
 cd FagAssistenten
 ```
 
-### Installer avhengigheter
+# Installer avhengigheter
 
 ```bash
 npm install
 ```
 
-### Opprett miljøvariabler
+# Opprett miljøvariabler
 
 Lag en `.env`-fil i prosjektroten:
 
@@ -160,7 +162,7 @@ OPENAI_API_KEY=din_openai_api_nokkel
 # INSTRUCTIONS=instruksjoner_til_botten
 ```
 
-### Start utviklingsserver
+# Start utviklingsserver
 
 ```bash
 npm run dev
@@ -169,7 +171,7 @@ npm run dev
 Åpne nettleseren på `http://localhost:5173`
 
 
-## Sikkerhet og personvern
+### Sikkerhet og personvern
 
 For å beskytte personvernet i dette prosjektet har jeg benyttet meg av samme løsning som det er i dagens Hugin. Med AI-leverandørene er det avtaler som zero retention avtale med Mistral og 30 dagers lagring av OpenAI. Med disse avtalene sikres det at:
 
@@ -197,6 +199,7 @@ For å beskytte personvernet i dette prosjektet har jeg benyttet meg av samme l�
 Under hele prosjektet har jeg benyttet to feilsøkingsstrategier som har hjulpet meg med å komme videre underveis:
 
 -**Console-logging av prosesser:** Å logge til konsollen hva som skjer, kan hjelpe med å se hvor programmet feiler.
+
 -**Bryte ned problemet:** Jeg har brutt ned problemer i små Python-skript, og isolert problemet i en mindre skala.
 
 Begge disse metodene har vært veldig hjelpsomme. De lar meg se hvordan prosessen gjennomføres i praksis underveis, og gir meg mulighet til å identifisere hva som må rettes opp.
