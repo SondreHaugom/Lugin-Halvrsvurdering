@@ -75,7 +75,7 @@ export async function POST({ request }) {
             console.log("Tools:", tools)
             let assistantMessage = newResponse.choices[0].message;
         }
-        console.log("Response from MistralAI:", assistantMessage.tools  );
+        console.log("Response from MistralAI:", assistantMessage, "Tools:", chuck_norris_joke());
         return json({ response: assistantMessage.content });
     } catch (error) {
         console.error("Error in Mistral request:", error);
