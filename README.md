@@ -50,35 +50,15 @@ Dette er en prototype av en chatbot som er satt opp met en multi agent arkitektu
 
 ```
 Lugin-Halvrsvurdering/
-├── 📁 src/                          # Hovedkildekode
-│   ├── 📄 app.html                  # HTML-mal for appen
-│   ├── 📁 lib/                      # Gjenbrukbare komponenter og utilities
-│   │   ├── 📄 index.js              # Hovedeksport fil
-│   │   ├── 📄 selectAgent.js        # 🔄 Agent-velger logikk (kobler frontend til backend)
-│   │   ├── 📁 assets/               # Statiske ressurser
-│   │   │   └── 📄 favicon.svg       # Nettstedikon
-│   │   └── 📁 logo/                 # Logoer og bilder
-│   │       ├── 📄 artificial intelligence.png
-│   │       └── 📄 artificial intelligence - Logo2.png
-│   │
-│   └── 📁 routes/                   # SvelteKit routing struktur
-│       ├── 📄 +layout.svelte        # Global layout og CSS variabler
-│       ├── 📄 +page.svelte          # Hovedside med chat-interface
-│       ├── 📁 Mistralai/            # Mistral AI API endpoint
-│       │   ├── 📄 +server.js        # Server-side API for Mistral (tool calls support)
-│       │   └── 📄 Test.py           # Python test script for Mistral API
-│       └── 📁 Openai/               # OpenAI API endpoint  
-│           └── 📄 +server.js        # Server-side API for OpenAI
-│
-├── 📁 static/                       # Statiske filer (tilgjengelig via URL)
-│   └── 📄 robots.txt               # Søkemotor instruksjoner
-│
-├── 📄 package.json                 # Prosjektavhengigheter og scripts
-├── 📄 package-lock.json            # Låst avhengighetsversioner
-├── 📄 svelte.config.js             # SvelteKit konfigurasjon
-├── 📄 vite.config.js               # Vite bundler konfigurasjon
-├── 📄 jsconfig.json                # JavaScript/TypeScript konfigurasjon
-└── 📄 README.md                    # Dette dokumentet
+├── src/
+│   ├── lib/
+│   │   └── selectAgent.js          # Velger hvilken AI som skal brukes
+│   └── routes/
+│       ├── +page.svelte            # Hovedside med chat
+│       ├── Mistralai/+server.js    # Mistral AI backend
+│       └── Openai/+server.js       # OpenAI backend
+├── package.json
+└── README.md
 ```
 
 ### Dataflyt
