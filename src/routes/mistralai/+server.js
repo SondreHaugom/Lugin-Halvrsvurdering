@@ -73,9 +73,10 @@ export async function POST({ request }) {
             });
             console.log("Messages", messages)
             console.log("Tools:", tools)
+            let assistantMessage = newResponse.choices[0].message;
         }
-        console.log("Response from MistralAI:", assistantMessage);
-        return json({ response: response.choices[0].message.content });
+        console.log("Response from MistralAI:", assistantMessage.tools  );
+        return json({ response: assistantMessage.content });
     } catch (error) {
         console.error("Error in Mistral request:", error);
         return json({ error: 'Internal Server Error' }, { status: 500 });

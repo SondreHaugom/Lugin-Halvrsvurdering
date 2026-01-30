@@ -21,9 +21,12 @@ En prototype av en chattetjeneste for alle ansatte i Telemark Fylkeskommune.
 - [Dataflyt](#-Dataflyt)
 - [Filforklaring](#-Filforklaring)
 - [Arkitektur-prinsipper](#-Arkitektur-prinsipper)
+- [Forklaring av API kall](#-Forklaring av API kall)
+- [Bruk av funksjonskall i prosjektet](#-Bruk av funksjonskall i prosjektet)
 - [Biblioteker og begrunnelse](#-Biblioteker og begrunnelse)
 - [Installasjon og oppsett](#-Installasjon og oppsett)
 - [Sikkerhet og personvern](#-Sikkerhet og personvern)
+- [Feilsøkings strategier](#-Feilsøkings strategier)
 
 
 ## Funksjoner
@@ -42,7 +45,7 @@ En prototype av en chattetjeneste for alle ansatte i Telemark Fylkeskommune.
 
 ## Om prosjektet
 
-Dette er en prototype av en chatbot som er satt opp met en multi agent arkitektur bygget med SvelteKit. Systemet lar brukeren velge mellom to ulige agenter som gir bruker mer valg muligheter etter ønsket leverandør. Man kan bytte mellom agenter underveis, men agenten vil ikke kunne kjenne igjen hva andre agenters respons. Dette er en Halvårsoppgave ettersom at jeg har vert lærling i over 6 måender. 
+Dette er en prototype av en chatbot som er satt opp med et multi agent arkitektur bygget med SvelteKit. Systemet lar brukeren velge mellom to ulige agenter som gir bruker mer valg muligheter etter ønsket leverandør. Man kan bytte mellom agenter underveis, men agenten vil ikke kunne kjenne igjen hva andre agenters respons. Dette er en Halvårsoppgave ettersom at jeg har vert lærling i over 6 måender. MIstral agenten skal ettervert få tilgang til funksjonskall for å gjøre det mulig for agenten til å benytte seg av innformasjon utenfor dens treningsdata. 
 
 
 
@@ -83,12 +86,12 @@ Lugin-Halvrsvurdering/
 
 | Fil/Mappe | Funksjon | Type |
 |-----------|----------|------|
-| `+page.svelte` | Chat-grensesnitt, brukerinteraksjon, DOM-håndtering | 🖥️ Frontend |
-| `selectAgent.js` | Router meldinger til riktig AI-agent | 🔄 Middleware |
-| `Mistralai/+server.js` | API endpoint for Mistral AI med tool calls support | 🤖 Backend API |
-| `Openai/+server.js` | API endpoint for OpenAI GPT modeller | 🤖 Backend API |
-| `+layout.svelte` | Global styling, CSS variabler, favicon | 🎨 Layout |
-| `Test.py` | Python test script for å validere Mistral API | 🧪 Testing |
+| `+page.svelte` | Chat-grensesnitt, brukerinteraksjon, DOM-håndtering | Frontend |
+| `selectAgent.js` | Router meldinger til riktig AI-agent | Middleware |
+| `Mistralai/+server.js` | API endpoint for Mistral AI med tool calls support | Backend API |
+| `Openai/+server.js` | API endpoint for OpenAI GPT modeller | Backend API |
+| `+layout.svelte` | Global styling, CSS variabler, favicon | Layout |
+| `Funksjosnkall.py` | Python test script for å teste ut funksjosnkall med Mistral API | Testing |
 
 ### Arkitektur-prinsipper
 
@@ -97,6 +100,18 @@ Lugin-Halvrsvurdering/
 - **Agent-system**: Modulær oppbygning hvor hver AI-leverandør har sitt eget API endpoint
 - **Responsiv design**: Mobile-first tilnærming med CSS Grid/Flexbox
 - **Tool calls**: Mistral støtter funksjonskall (f.eks. Chuck Norris vitser)
+
+
+### Forklaring av API kall
+For dette projektet av vi to forskjellige agent leverandører:
+- **OpenAI**
+- **Mistral**
+
+Hver leverandør tilbyr et API som vi bruker for å kommunisere med deres språkmodeller. Når en bruker sender en prompt til den valgte modellen, sendes denne forespørselen til det aktuelle API-et (OpenAI eller Mistral). API-et videresender så forespørselen til språkmodellen, som genererer et svar (respons). Dette svaret sendes tilbake via API-et og vises til brukeren.
+
+
+### Bruk av funksjonskall i prosjektet
+I dette prosjektet blir funksjonskall brukt sammen med Chuck Norris-API-et. Dette er satt opp for å få en generell forståelse av hvordan funksjonskall skal konfigureres i Mistral. Løsningen er implementert i et Python-script som jeg laget for å teste hvordan dette kan gjennomføres i praksis. Deretter rettet jeg løsningen mot selve agenten som skulle ha funksjonskallet, og har begynt å implementere det der. 
 
 
 
@@ -114,28 +129,27 @@ Lugin-Halvrsvurdering/
 
 
 ## Installasjon og oppsett
-## 🧰 Installasjon og oppsett
 
-### 📋 Forutsetninger
+### Forutsetninger
 
 - ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat&logo=node.js&logoColor=white)
 - ![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)
 - OpenAI API-nøkkel
 
-### 1️⃣ Kloning av repository
+### Kloning av repository
 
 ```bash
 git clone https://github.com/ditt-brukernavn/FagAssistenten.git
 cd FagAssistenten
 ```
 
-### 2️⃣ Installer avhengigheter
+### Installer avhengigheter
 
 ```bash
 npm install
 ```
 
-### 3️⃣ Opprett miljøvariabler
+### Opprett miljøvariabler
 
 Lag en `.env`-fil i prosjektroten:
 
@@ -146,7 +160,7 @@ OPENAI_API_KEY=din_openai_api_nokkel
 # INSTRUCTIONS=instruksjoner_til_botten
 ```
 
-### 4️⃣ Start utviklingsserver
+### Start utviklingsserver
 
 ```bash
 npm run dev
@@ -159,20 +173,30 @@ npm run dev
 
 For å beskytte personvernet i dette prosjektet har jeg benyttet meg av samme løsning som det er i dagens Hugin. Med AI-leverandørene er det avtaler som zero retention avtale med Mistral og 30 dagers lagring av OpenAI. Med disse avtalene sikres det at:
 
-### 🔒 Datahåndtering
+### Datahåndtering
 
 - **Mistral AI**: Zero retention policy - ingen data lagres permanent
 - **OpenAI**: 30 dagers lagringspolicy før automatisk sletting
 - **Lokal lagring**: Ingen sensitiv data lagres lokalt i nettleseren
 - **API-nøkler**: Sikret gjennom miljøvariabler på serversiden
 
-### 🛡️ Sikkerhetstiltak
+### Sikkerhetstiltak
 
 - **Server-side API calls**: Alle forespørsler går via backend for å skjule API-nøkler
 - **Miljøvariabler**: Sensitive data eksponeres ikke til frontend
 
-### 📋 Personvernshensyn
+### Personvernshensyn
 
 - **Ingen persistent lagring**: Chat-historikk lagres ikke permanent
 - **Anonymisering**: Ingen personidentifiserbar informasjon samles inn
 - **Transparent**: Brukere informeres om hvilken AI-leverandør som brukes
+
+
+
+### Feilsøkings strategier
+Under hele prosjektet har jeg benyttet to feilsøkingsstrategier som har hjulpet meg med å komme videre underveis:
+
+-**Console-logging av prosesser:** Å logge til konsollen hva som skjer, kan hjelpe med å se hvor programmet feiler.
+-**Bryte ned problemet:** Jeg har brutt ned problemer i små Python-skript, og isolert problemet i en mindre skala.
+
+Begge disse metodene har vært veldig hjelpsomme. De lar meg se hvordan prosessen gjennomføres i praksis underveis, og gir meg mulighet til å identifisere hva som må rettes opp.
