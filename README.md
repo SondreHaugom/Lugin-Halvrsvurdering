@@ -17,17 +17,17 @@ En prototype av en chattetjeneste for alle ansatte i Telemark Fylkeskommune.
 
 ### Innholdsfortegnelse
 - [Funksjoner](#-Funksjoner)
-- [Om prosjektet](#-Om prosjektet)
+- [Om-prosjektet](#-Om prosjektet)
 - [Prosjektstruktur](#-Prosjektstruktur)
 - [Dataflyt](#-Dataflyt)
 - [Filforklaring](#-Filforklaring)
 - [Arkitektur-prinsipper](#-Arkitektur-prinsipper)
-- [Forklaring av API kall](#-Forklaring av API kall)
-- [Bruk av funksjonskall i prosjektet](#-Bruk av funksjonskall i prosjektet)
-- [Biblioteker og begrunnelse](#-Biblioteker og begrunnelse)
-- [Installasjon og oppsett](#-Installasjon og oppsett)
-- [Sikkerhet og personvern](#-Sikkerhet og personvern)
-- [Feilsøkings strategier](#-Feilsøkings strategier)
+- [Forklaring-av-API-kall](#-Forklaring av API kall)
+- [Bruk-av-funksjonskall-i-prosjektet](#-Bruk av funksjonskall i prosjektet)
+- [Biblioteker-og-begrunnelse](#-Biblioteker og begrunnelse)
+- [Installasjon-og-oppsett](#-Installasjon og oppsett)
+- [Sikkerhet-og-personvern](#-Sikkerhet og personvern)
+- [Feilsøkings-strategier](#-Feilsøkings strategier)
 
 
 ### Funksjoner
