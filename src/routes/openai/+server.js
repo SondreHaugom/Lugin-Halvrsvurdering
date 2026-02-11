@@ -9,43 +9,33 @@ const client = new OpenAI({
 });
 
 
-let response_ID = null;
+
 
 /** @type {import('./$types').requestHandler} */
 
 export async function POST(request) {
     try {
-        const {message} = await request.request.json();
-        console.log("Message received on server:", message);
+        const { message, previousResponseId} = await request.request.json();
 
         const response = await client.responses.create({
             model: "gpt-5.1",
-            instructions: "You are a helpful assistant.",
+            instructions: "Du er en hjelpsom assistent",
             input: [
                 {
                     role: "user",
                     content: message,
-                }
+                },
             ],
-            previous_response_id: response_ID
-
+            previous_response_id: previousResponseId
         });
-        response_ID = response.id;
-        console.log("Response from OpenAI:", response);
 
-        return json({ response: response.output_text });
+        return json({ 
+            response: response.output_text,
+            responseId: response.id 
+    });
     } catch (error) {
-        console.error("Error in OpenAI request:", error);
-        if (error.response) {
-            try {
-                const errorDetails = await error.response.json();
-                console.error("OpenAI API error details:", errorDetails);
-                return json({ error: errorDetails }, { status: error.response.status });
-            } catch (parseErr) {
-                console.error("Error parsing OpenAI error response:", parseErr);
-            }
-        }
-        return json({ error: 'Internal Server Error' }, { status: 500 });
+        console.error("Error in OpenAI API call:", error);
+        return json({ error: "An error occurred while processing your request." }, { status: 500 });
     }
     
 }

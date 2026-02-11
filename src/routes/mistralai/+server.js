@@ -2,9 +2,10 @@ import { json } from '@sveltejs/kit';
 import { Mistral } from "@mistralai/mistralai";
 import { env } from '$env/dynamic/private';
 
+// oppretter klient for MistralAI med API-nøkkel fra miljøvariabler
 const client = new Mistral({ apiKey: env.MISTRAL_API_KEY });
 
-
+// deklarerer verktøy som MistralAI kan bruke, i dette tilfellet en funksjon for å hente en Chuck Norris-vits
 const tools = [
   {
     type: "function",
@@ -16,10 +17,12 @@ const tools = [
   }
 ];
 
+// Legger til funksjonen som MistralAI bruker for å kjøre funksjonskall når den ønsker å hente en Chuck Norris-vits
 const chuck_norris_joke = async () => {
     try {
         const res = await fetch("https://api.chucknorris.io/jokes/random");
         const data = await res.json();
+        console.log("Fetched joke from Chuck Norris API:", data.value);
         return data.value;
     } catch {
         return "Could not fetch joke at this time.";
@@ -46,6 +49,7 @@ export async function POST({ request }) {
             tools: tools
         });
 
+        // variabel for generelle svar fra assistent
         let assistantMessage = response.choices[0].message;
 
         // Loop over tool_calls
