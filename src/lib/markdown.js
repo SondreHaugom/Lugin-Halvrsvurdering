@@ -5,6 +5,10 @@ import "katex/dist/katex.min.css"
 import markdownKatex from "@vscode/markdown-it-katex"
 
 
+export const wrapInPreCode = (code) => {
+    return `${code}`
+};
+
 export const md = markdownit({
     highlight: (str, lang) => {
         if (lang && hljs.getLanguage(lang)) {
@@ -17,7 +21,7 @@ export const md = markdownit({
         }
         return wrapInPreCode(md.utils.escapeHtml(str))
     }
-})
+});
 
 md.use(markdownKatex.default || markdownKatex )
 
@@ -43,4 +47,4 @@ export const addKaTexToMathStrings = (text) => {
 export const renderMarkdown = (markdownText) => {
     const textWithKaTex = addKaTexToMathStrings(markdownText)
     return md.render(textWithKaTex)
-}
+};

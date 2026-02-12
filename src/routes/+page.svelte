@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { selectAgent} from "../lib/selectAgent.js";
   import { marked } from 'marked';
-  import { md, addKaTexToMathStrings } from "../lib/markdown.js";
+  import { md, addKaTexToMathStrings, wrapInPreCode } from "../lib/markdown.js";
   import '$lib/global.css';
 
 
@@ -64,7 +64,7 @@
         // setter meldingsinnholdet
         if (className === 'chat_incoming') {
             // bruker markdown-funksjonen for å formatere botens svar
-            messageDiv.innerHTML = md.render(addKaTexToMathStrings(message));
+            messageDiv.innerHTML = md.render(addKaTexToMathStrings(wrapInPreCode(message)));
         } else {
             messageDiv.textContent = message;
         }
