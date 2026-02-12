@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { selectAgent} from "../lib/selectAgent.js";
   import { marked } from 'marked';
-  import { md } from "../lib/markdown.js";
+  import { md, addKaTexToMathStrings } from "../lib/markdown.js";
   import '$lib/global.css';
 
 
@@ -64,7 +64,7 @@
         // setter meldingsinnholdet
         if (className === 'chat_incoming') {
             // bruker markdown-funksjonen for å formatere botens svar
-            messageDiv.innerHTML = md.render(message);
+            messageDiv.innerHTML = md.render(addKaTexToMathStrings(message));
         } else {
             messageDiv.textContent = message;
         }
@@ -82,8 +82,7 @@
         if (inputmessage === "") return;
         // viser brukerens melding i chatboksen
         createChatMessage(inputmessage, 'chat_outgoing');
-        createChatMessage(selectBtn.value, 'chat_incoming');
-        
+
         // henter valgt agent fra dropdown-menyen
         const selectedAgent = selectBtn.value;
         // henter tidligere response ID for denne agenten
@@ -173,23 +172,19 @@
             <option value="Openai">OpenAI</option>
         </select>
    <!-- Pråver å legge inn for samtale historikk-->
-        <!--
-        <h2>
-            Samtale historikk 
-        </h2>
-    
 
+     <!-- 
         <div class="convHistory">
             <ul>
                 {#each Object.entries(agentResponseIDHistory) as [agent, responseIds]}
                     <li><strong>{agent}:</strong></li>
                     {#each responseIds as responseId}
-                        <li style="margin-left: 20px;">{responseId}</li>
+                        <li style="margin-left: 10px;">{responseId}</li>
                     {/each}
                 {/each}
             </ul>
         </div>
-        -->
+     -->
     </div>
 
 <div class="chatbot_wrapper" class:shifted={isMenuOpen}>
@@ -209,109 +204,6 @@
 </main>
 
 <style>
-
- /* Global markdown-styling */
-    :global(.bot_message h1), :global(.user_message h1) {
-        color: #ffffff;
-        margin: 1.2em 0 0.8em 0;
-        font-size: 1.5em;
-        font-weight: bold;
-        border-bottom: 2px solid #f8f8f8;
-        padding-bottom: 0.3em;
-    }
-    
-    :global(.bot_message h2), :global(.user_message h2) {
-        color: #ffffff;
-        margin: 1em 0 0.6em 0;
-        font-size: 1.3em;
-        font-weight: bold;
-    }
-    
-    :global(.bot_message h3), :global(.user_message h3) {
-        color: #ffffff;
-        margin: 0.8em 0 0.4em 0;
-        font-size: 1.1em;
-        font-weight: bold;
-    }
-
-    /* Kodeblokker (pre + code) */
-    :global(.bot_message pre), :global(.user_message pre) {
-        background: #484848;
-        color: #ecf0f1;
-        padding: 16px 20px;
-        border-radius: 8px;
-        margin: 12px 0;
-        overflow-x: auto;
-        font-size: 14px;
-        line-height: 1.4;
-        border-left: 4px solid #353434;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    }
-
-    /* Inline kode */
-    :global(.bot_message code), :global(.user_message code) {
-        background: #34495e;
-        color: #e74c3c;
-        padding: 3px 6px;
-        border-radius: 4px;
-        font-size: 0.9em;
-        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-        font-weight: 500;
-    }
-
-    /* Unngå dobbel styling for kode inne i pre-tagger */
-    :global(.bot_message pre code), :global(.user_message pre code) {
-        background: transparent;
-        color: inherit;
-        padding: 0;
-        border-radius: 0;
-        font-size: inherit;
-    }
-
-    /* Tekst-formatting */
-    :global(.bot_message strong), :global(.user_message strong) {
-        font-weight: bold;
-        color: #ffffff;
-    }
-    
-    :global(.bot_message em), :global(.user_message em) {
-        font-style: italic;
-        color: #ffffff;
-    }
-
-    /* Lister */
-    :global(.bot_message ul), :global(.user_message ul) {
-        margin: 0.8em 0;
-        padding-left: 1.5em;
-    }
-    
-    :global(.bot_message ol), :global(.user_message ol) {
-        margin: 0.8em 0;
-        padding-left: 1.5em;
-    }
-    
-    :global(.bot_message li), :global(.user_message li) {
-        margin: 0.3em 0;
-        line-height: 1.4;
-    }
-
-    /* Avsnitt */
-    :global(.bot_message p), :global(.user_message p) {
-        margin: 0.8em 0;
-        line-height: 1.6;
-    }
-
-    /* Sitater */
-    :global(.bot_message blockquote), :global(.user_message blockquote) {
-        border-left: 4px solid #95a5a6;
-        margin: 1em 0;
-        padding: 0.5em 1em;
-        background: rgba(149, 165, 166, 0.1);
-        font-style: italic;
-    }
-
-
 
 
 
@@ -337,7 +229,7 @@ h2 {
     border-radius: 10px;
     padding: 10px;
     height: 500px;
-    margin-top: 10px;
+    margin-top: 60px;
     margin-bottom: 20px;
 }
 .sidebar {
@@ -415,13 +307,12 @@ h2 {
 .chatbox {
     position: absolute;
     top: 30px;
-    left: 27%;
-    width: 47.5%;
+    left: 25%;
+    width: 51%;
     overflow-y: auto;
-    max-width: 50%;
+    max-width: 51%;
     height: 850px;
     z-index: 2000;
-    
 
 
 }
@@ -520,11 +411,13 @@ h2 {
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
     :global(.bot_message) {
+        text-align: left;
         color: black;
         padding: 10px;
         margin: 10px;
-        max-width: 60%;
-        align-self: flex-end;
+        width: auto;
+        max-width: 53%;
+        align-self: flex-start;
         display: block;
 }
 
@@ -532,6 +425,7 @@ h2 {
         background-color: var(  --color-himmel-10);
         width: 25%;
         text-align: center;
+        margin-top: 10px;
         font-size: 17px;
         border-radius: 5px;
         border-top-left-radius: 1px;

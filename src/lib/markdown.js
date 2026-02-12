@@ -19,4 +19,28 @@ export const md = markdownit({
     }
 })
 
+md.use(markdownKatex.default || markdownKatex )
 
+export const addKaTexToMathStrings = (text) => {
+    const lines = text.split("\n")
+    let isInCodeBlock = false
+    const linesWithKaTex = []
+    for (let line of lines) {
+        if (line.includes("```")) {
+            isInCodeBlock = !isInCodeBlock
+        }
+        if (!isInCodeBlock && (line.includes("\\[") || line.includes("\\(") || line.includes("\\]") || line.includes("\\)"))) {
+            line = line.replaceAll("\\[", "$$").replaceAll("\\]", "$$")
+			line = line.replaceAll("\\(", "$").replaceAll("\\)", "$")
+			linesWithKaTex.push(line) // Add the modified line
+			continue
+        }
+        linesWithKaTex.push(line) // Add the original line
+    }
+    return linesWithKaTex.join("\n")
+}
+
+export const renderMarkdown = (markdownText) => {
+    const textWithKaTex = addKaTexToMathStrings(markdownText)
+    return md.render(textWithKaTex)
+}
