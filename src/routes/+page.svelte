@@ -2,16 +2,24 @@
   // importerer onMount fra svelte
   import { onMount } from "svelte";
   import { selectAgent} from "../lib/selectAgent.js";
+  import { marked } from 'marked';
+  import { md } from "../lib/markdown.js";
+  import '$lib/global.css';
 
 
     // deklarerer globale variabler
     let chatbox, userInput, sendBtn, resetBtn, toggleBtn, selectBtn;
     let currentAgent = "mistralai"; // Standard agent
 
-    // Lagre response ID per agent
+    // Store response ID per agent
     let agentResponseIds = {
         'Openai': null,
         'Mistralai': null
+    };
+
+    let agentResponseIDHistory = {
+        'Openai': [],
+        'Mistralai': []
     };
 
     // variabel for å spore menyens tilstand
@@ -28,6 +36,7 @@
 
 
     }
+    
 
     // funksjo|n for å opprette og legge til meldinger i chatboksen
     const createChatMessage = (message, className ) => {
@@ -54,7 +63,8 @@
 
         // setter meldingsinnholdet
         if (className === 'chat_incoming') {
-            messageDiv.innerHTML = message;
+            // bruker markdown-funksjonen for å formatere botens svar
+            messageDiv.innerHTML = md.render(message);
         } else {
             messageDiv.textContent = message;
         }
@@ -78,11 +88,16 @@
         const selectedAgent = selectBtn.value;
         // henter tidligere response ID for denne agenten
         const previousResponseId = agentResponseIds[selectedAgent];
+        console.log("Previous Response ID for " + selectedAgent + ": " + previousResponseId);
         
         // sender melding til SelectAgent.js og venter på svar fra utvalgt agent
         selectAgent(inputmessage, selectedAgent, previousResponseId).then((result) => {
             // Lagre ny response ID for denne agenten
             agentResponseIds[selectedAgent] = result.responseId;
+            agentResponseIDHistory[selectedAgent].push(result.responseId);
+            console.log("Response ID for " + selectedAgent + ": " + result.responseId);
+            console.log("Response ID History for " + selectedAgent + ": " + agentResponseIDHistory[selectedAgent]);
+            
             
             createChatMessage(result.response, 'chat_incoming', true);
         });
@@ -107,6 +122,14 @@
 
         if (resetBtn) {
             resetBtn.addEventListener("click", () => {
+                agentResponseIds = {
+                    'Openai': null,
+                    'Mistralai': null
+                };
+                agentResponseIDHistory = {
+                    'Openai': [],
+                    'Mistralai': []
+                };
                 chatbox.innerHTML = '';
                 alert("Ny samtale startet!");
             });
@@ -149,11 +172,29 @@
             <option value="Mistralai">MistralAI</option>
             <option value="Openai">OpenAI</option>
         </select>
+   <!-- Pråver å legge inn for samtale historikk-->
+        <!--
+        <h2>
+            Samtale historikk 
+        </h2>
+    
+
+        <div class="convHistory">
+            <ul>
+                {#each Object.entries(agentResponseIDHistory) as [agent, responseIds]}
+                    <li><strong>{agent}:</strong></li>
+                    {#each responseIds as responseId}
+                        <li style="margin-left: 20px;">{responseId}</li>
+                    {/each}
+                {/each}
+            </ul>
+        </div>
+        -->
     </div>
 
 <div class="chatbot_wrapper" class:shifted={isMenuOpen}>
+    <div class="current-agent">{currentAgent}</div>
     <ul class="chatbox">
-        <div class="current-agent">{currentAgent}</div>
         <li class="chat_incoming">
         </li>
 
@@ -169,150 +210,111 @@
 
 <style>
 
-:root {
-  --color-fjord: #14828C;
-  --color-fjord-10: #E7F2F3;
-  --color-fjord-20: #D0E6E8;
-  --color-fjord-30: #B8D9DC;
-  --color-fjord-40: #A1CDD1;
-  --color-fjord-50: #89C0C5;
-  --color-fjord-60: #72B4BA;
-  --color-fjord-70: #5AA7AE;
-  --color-fjord-80: #439BA3;
-  --color-fjord-90: #2B8E97;
+ /* Global markdown-styling */
+    :global(.bot_message h1), :global(.user_message h1) {
+        color: #ffffff;
+        margin: 1.2em 0 0.8em 0;
+        font-size: 1.5em;
+        font-weight: bold;
+        border-bottom: 2px solid #f8f8f8;
+        padding-bottom: 0.3em;
+    }
+    
+    :global(.bot_message h2), :global(.user_message h2) {
+        color: #ffffff;
+        margin: 1em 0 0.6em 0;
+        font-size: 1.3em;
+        font-weight: bold;
+    }
+    
+    :global(.bot_message h3), :global(.user_message h3) {
+        color: #ffffff;
+        margin: 0.8em 0 0.4em 0;
+        font-size: 1.1em;
+        font-weight: bold;
+    }
 
-  --color-himmel: #009BC2;
-  --color-himmel-10: #E5F5F9;
-  --color-himmel-20: #CCEBF3;
-  --color-himmel-30: #B2E1ED;
-  --color-himmel-40: #99D7E7;
-  --color-himmel-50: #80CDE0;
-  --color-himmel-60: #66C3DA;
-  --color-himmel-70: #4CB9D4;
-  --color-himmel-80: #33AFCE;
-  --color-himmel-90: #19A5C8;
+    /* Kodeblokker (pre + code) */
+    :global(.bot_message pre), :global(.user_message pre) {
+        background: #484848;
+        color: #ecf0f1;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin: 12px 0;
+        overflow-x: auto;
+        font-size: 14px;
+        line-height: 1.4;
+        border-left: 4px solid #353434;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    }
 
-  --color-gress: #1F9562;
-  --color-gress-10: #E9F4EF;
-  --color-gress-20: #D2EAE0;
-  --color-gress-30: #BCDFD0;
-  --color-gress-40: #A5D5C0;
-  --color-gress-50: #8FCAB0;
-  --color-gress-60: #79BFA1;
-  --color-gress-70: #62B591;
-  --color-gress-80: #4CAA81;
-  --color-gress-90: #35A072;
+    /* Inline kode */
+    :global(.bot_message code), :global(.user_message code) {
+        background: #34495e;
+        color: #e74c3c;
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-weight: 500;
+    }
 
-  --color-gran: #2F7542;
-  --color-gran-10: #EAF1EC;
-  --color-gran-20: #D5E3D9;
-  --color-gran-30: #C1D6C6;
-  --color-gran-40: #ACC8B3;
-  --color-gran-50: #97BAA0;
-  --color-gran-60: #82AC8E;
-  --color-gran-70: #6D9E7B;
-  --color-gran-80: #599168;
-  --color-gran-90: #448355;
+    /* Unngå dobbel styling for kode inne i pre-tagger */
+    :global(.bot_message pre code), :global(.user_message pre code) {
+        background: transparent;
+        color: inherit;
+        padding: 0;
+        border-radius: 0;
+        font-size: inherit;
+    }
 
-  --color-korn: #A5983A;
-  --color-korn-10: #F6F5EB;
-  --color-korn-20: #EDEAD8;
-  --color-korn-30: #E4E0C4;
-  --color-korn-40: #DBD6B0;
-  --color-korn-50: #D2CB9C;
-  --color-korn-60: #C9C189;
-  --color-korn-70: #C0B775;
-  --color-korn-80: #B7AD61;
-  --color-korn-90: #AEA24E;
+    /* Tekst-formatting */
+    :global(.bot_message strong), :global(.user_message strong) {
+        font-weight: bold;
+        color: #ffffff;
+    }
+    
+    :global(.bot_message em), :global(.user_message em) {
+        font-style: italic;
+        color: #ffffff;
+    }
 
-  --color-stein: #7B7B7A;
-  --color-stein-10: #F2F2F2;
-  --color-stein-20: #E5E5E4;
-  --color-stein-30: #D7D7D7;
-  --color-stein-40: #CACACA;
-  --color-stein-50: #BDBDBC;
-  --color-stein-60: #B0B0AF;
-  --color-stein-70: #A3A3A2;
-  --color-stein-80: #959595;
-  --color-stein-90: #888887;
+    /* Lister */
+    :global(.bot_message ul), :global(.user_message ul) {
+        margin: 0.8em 0;
+        padding-left: 1.5em;
+    }
+    
+    :global(.bot_message ol), :global(.user_message ol) {
+        margin: 0.8em 0;
+        padding-left: 1.5em;
+    }
+    
+    :global(.bot_message li), :global(.user_message li) {
+        margin: 0.3em 0;
+        line-height: 1.4;
+    }
 
-  --color-berg: #727062;
-  --color-berg-10: #F1F1EF;
-  --color-berg-20: #E3E2E0;
-  --color-berg-30: #D5D4D0;
-  --color-berg-40: #C7C6C0;
-  --color-berg-50: #B8B7B0;
-  --color-berg-60: #AAA9A1;
-  --color-berg-70: #9C9B91;
-  --color-berg-80: #8E8D81;
-  --color-berg-90: #807E72;
+    /* Avsnitt */
+    :global(.bot_message p), :global(.user_message p) {
+        margin: 0.8em 0;
+        line-height: 1.6;
+    }
 
-  --color-strand: #8A6C3E;
-  --color-strand-10: #F3F0EC;
-  --color-strand-20: #E8E2D8;
-  --color-strand-30: #DCD3C5;
-  --color-strand-40: #D0C4B2;
-  --color-strand-50: #C4B59E;
-  --color-strand-60: #B9A78B;
-  --color-strand-70: #AD9878;
-  --color-strand-80: #A18965;
-  --color-strand-90: #967B51;
+    /* Sitater */
+    :global(.bot_message blockquote), :global(.user_message blockquote) {
+        border-left: 4px solid #95a5a6;
+        margin: 1em 0;
+        padding: 0.5em 1em;
+        background: rgba(149, 165, 166, 0.1);
+        font-style: italic;
+    }
 
-  --color-siv: #BC7726;
-  --color-siv-10: #F8F1E9;
-  --color-siv-20: #F2E4D4;
-  --color-siv-30: #EBD6BE;
-  --color-siv-40: #E4C9A8;
-  --color-siv-50: #DDBB92;
-  --color-siv-60: #D7AD7D;
-  --color-siv-70: #D0A067;
-  --color-siv-80: #C99251;
-  --color-siv-90: #C3853C;
 
-  --color-bark: #996954;
-  --color-bark-10: #F5F0EE;
-  --color-bark-20: #EBE1DD;
-  --color-bark-30: #E0D2CC;
-  --color-bark-40: #D6C3BB;
-  --color-bark-50: #CCB4A9;
-  --color-bark-60: #C2A598;
-  --color-bark-70: #B89687;
-  --color-bark-80: #AD8776;
-  --color-bark-90: #A37865;
 
-  --color-nype: #B7173D;
-  --color-nype-10: #F8E8EC;
-  --color-nype-20: #F1D1D8;
-  --color-nype-30: #E9B9C5;
-  --color-nype-40: #E2A2B1;
-  --color-nype-50: #DB8B9E;
-  --color-nype-60: #D4748B;
-  --color-nype-70: #CD5D77;
-  --color-nype-80: #C54564;
-  --color-nype-90: #BE2E50;
 
-  --color-plomme: #5A2E61;
-  --color-plomme-10: #EEEAEF;
-  --color-plomme-20: #DED5DF;
-  --color-plomme-30: #CDC0D0;
-  --color-plomme-40: #BDABC0;
-  --color-plomme-50: #AC96B0;
-  --color-plomme-60: #9C82A0;
-  --color-plomme-70: #8B6D90;
-  --color-plomme-80: #7B5881;
-  --color-plomme-90: #6A4371;
 
-  --color-blaveis: #414681;
-  --color-blaveis-10: #ECECF2;
-  --color-blaveis-20: #D9DAE6;
-  --color-blaveis-30: #C6C7D9;
-  --color-blaveis-40: #B3B5CD;
-  --color-blaveis-50: #A0A2C0;
-  --color-blaveis-60: #8D90B3;
-  --color-blaveis-70: #7A7DA7;
-  --color-blaveis-80: #676B9A;
-  --color-blaveis-90: #54588E;
-}
 
 main {
     background-color: var(--color-fjord-10);
@@ -323,6 +325,18 @@ main {
 h1 {
     text-align: center;
     font-family: Helvetica, Arial, sans-serif;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+h2 {
+    padding: 10px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+.convHistory {
+    background-color: var(--color-gran-30);
+    border-radius: 10px;
+    padding: 10px;
+    height: 500px;
     margin-top: 10px;
     margin-bottom: 20px;
 }
@@ -430,8 +444,8 @@ h1 {
 }
 
 .chatbot_wrapper.shifted {
-    margin-left: 255px;
-    width: calc(99% - 245px);
+    margin-left: 205px;
+    width: calc(99% - 195px);
 }
 .input-container {
     position: absolute;
@@ -445,7 +459,6 @@ h1 {
     width: 50%;
     max-width: 50%;
     height: 50px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     z-index: 9999;
     display: flex;
     align-items: center;
