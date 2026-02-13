@@ -1,6 +1,8 @@
 import {env} from '$env/dynamic/private';
 import { json } from '@sveltejs/kit';
 import OpenAI from "openai";
+import { saveConfig} from '/src/routes/+page.svelte';
+
 
 const openai_api_key = env.OPENAI_API_KEY;
 
@@ -21,7 +23,7 @@ export async function POST(request) {
 
         const response = await client.responses.create({
             model: "gpt-5.1",
-            instructions: "Du er en hjelpsom assistent som er en FagAssistent. Du er en ekspert og en lærer for VG3 løpet som IT UTvikler lærling. Du svarer på generelle spørsmål fra brukeren, og du har tilgang til et verktøy for å søke i dokumenter som er relevante for VG3 IT Utvikler løpet. Når brukeren ber om informasjon som kan finnes i dokumentene, skal du bruke verktøyet for å søke etter relevant informasjon og inkludere det i svaret ditt. Hvis du bruker verktøyet, sørg for å forklare hva du gjorde og hvordan det hjalp deg med å finne svaret.",
+            instructions: saveConfig(),
             input: [
                 {
                     role: "user",

@@ -6,6 +6,14 @@
   import { md, addKaTexToMathStrings, wrapInPreCode } from "../lib/markdown.js";
   import '$lib/global.css';
 
+   let systemInstruks =  "";
+   let selectedConfigAgent = "";
+
+  export const saveConfig = () => {
+       console.log(`Instruksjoner for ${selectedConfigAgent}: ${systemInstruks}`);
+       // Her kan du sende instruksjonene til API eller lagre dem i en global tilstand
+   }
+
 
     // deklarerer globale variabler
     let chatbox, userInput, sendBtn, resetBtn, toggleBtn, selectBtn;
@@ -192,6 +200,24 @@
 
 <div class="chatbot_wrapper" class:shifted={isMenuOpen}>
     <div class="current-agent">{currentAgent}</div>
+    <div class="agent_config">
+        <select bind:value={selectedConfigAgent} >
+            <label for="">
+                Velg agent å konfigurere
+            </label>
+            <option value="Mistralai">MistralAI</option>
+            <option value="Openai">OpenAI</option>
+            <option value="FagAssistenten">FagAssistenten</option>
+        </select>
+        
+        {#if selectedConfigAgent}
+        <input type="text" 
+               bind:value={systemInstruks} 
+               placeholder="Skriv instruksjoner til {selectedConfigAgent}...">
+        <button on:click={saveConfig}>Lagre</button>
+    {/if}
+      
+    </div>
     <ul class="chatbox">
         <li class="chat_incoming">
         </li>
