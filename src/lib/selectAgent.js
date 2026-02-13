@@ -2,6 +2,7 @@
 
 export const selectAgent = async (message, agentType, previousResponseId = null) => {
     let endpoint = '/Mistralai';
+    if (agentType === 'FagAssistenten') endpoint = '/FagAssistenten';
     if (agentType === 'Openai') endpoint = '/Openai';
 
     if (!agentType) {

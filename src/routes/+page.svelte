@@ -14,12 +14,14 @@
     // Store response ID per agent
     let agentResponseIds = {
         'Openai': null,
-        'Mistralai': null
+        'Mistralai': null,
+        'FagAssistenten': null
     };
 
     let agentResponseIDHistory = {
         'Openai': [],
-        'Mistralai': []
+        'Mistralai': [],
+        'FagAssistenten': []
     };
 
     // variabel for å spore menyens tilstand
@@ -170,6 +172,7 @@
         <select title="Velg agent" class="select-btn" name="" id="">
             <option value="Mistralai">MistralAI</option>
             <option value="Openai">OpenAI</option>
+            <option value="FagAssistenten">FagAssistenten</option>
         </select>
    <!-- Pråver å legge inn for samtale historikk-->
 
@@ -534,5 +537,23 @@ h2 {
 
     
         } 
+}
+
+@media (min-width: 1200px) and (max-width: 1800px) {
+        .chatbox {
+            left: 23%;
+            max-height: 80%;
+            max-width: 60%;
+            overflow-y: auto;
+
+
+        }
+        .chatbot_wrapper {
+            width: 96.2%;
+        }
+        .chatbot_wrapper.shifted {
+            margin-left: 200px;
+            width: calc(99% - 200px);
+        }
 }
 </style>
