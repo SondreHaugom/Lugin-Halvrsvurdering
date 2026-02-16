@@ -1,14 +1,18 @@
+// Denne filen håndterer markdown rendering, inkludert kodeblokker og KaTeX for matematiske uttrykk
+
+// Importerer nødvendige biblioteker for markdown rendering og syntaksutheving
 import hljs from "highlight.js"
 import markdownit from "markdown-it"
 import "highlight.js/styles/a11y-light.min.css"
 import "katex/dist/katex.min.css"
 import markdownKatex from "@vscode/markdown-it-katex"
 
-
+// funksjoen for å pakke inn kode i pre og code tagger for riktig formatering i markdown
 export const wrapInPreCode = (code) => {
     return `${code}`
 };
 
+// Funksjoen for generell markdown rendering, som også håndterer syntaksutheving for kodeblokker og KaTeX for matematiske uttrykk
 export const md = markdownit({
     highlight: (str, lang) => {
         if (lang && hljs.getLanguage(lang)) {
@@ -25,6 +29,7 @@ export const md = markdownit({
 
 md.use(markdownKatex.default || markdownKatex )
 
+// Denne funksjonen legger til KaTeX-støtte for matematiske uttrykk i markdown-tekst, og sørger for at det ikke påvirker kodeblokker
 export const addKaTexToMathStrings = (text) => {
     const lines = text.split("\n")
     let isInCodeBlock = false

@@ -1,10 +1,12 @@
 
-
+// Denne funksjonen sender en melding til den valgte agenten og returnerer både svaret og response ID
 export const selectAgent = async (message, agentType, previousResponseId = null) => {
+    // Bestem endpoint basert på agentType
     let endpoint = '/Mistralai';
     if (agentType === 'FagAssistenten') endpoint = '/FagAssistenten';
     if (agentType === 'Openai') endpoint = '/Openai';
 
+    // Sjekk at agentType er gyldig
     if (!agentType) {
         console.error('Agent type is not specified.');
         return {response: 'Error: Agent type is not specified.', responseId: null};
@@ -12,7 +14,7 @@ export const selectAgent = async (message, agentType, previousResponseId = null)
 
     console.log(`Sending message to ${agentType} endpoint:`);
 
-
+    // Sender og motar melding til riktig endpoint basert på agentType
     const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -23,9 +25,10 @@ export const selectAgent = async (message, agentType, previousResponseId = null)
             previousResponseId: previousResponseId
         })
     });
-
+    // Oppretter en payload variabel for å håndtere både OpenAI og MistralAI svar, og returnerer både svaret og response ID
     const payload = await response.json();
 
+    // Håndterer både OpenAI og MistralAI svar, og returnerer både svaret og response ID
     const raw = payload.response ??
         payload.choices?.[0]?.message?.content ?? '';
 

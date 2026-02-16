@@ -33,6 +33,9 @@ export async function POST(request) {
                     type: "file_search",
                     vector_store_ids: [VC_STORE_ID],
                 },
+                {
+                    type: "web_search",
+                },
             ],
             previous_response_id: previousResponseId
         });
