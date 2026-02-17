@@ -1,6 +1,6 @@
 
 // Denne funksjonen sender en melding til den valgte agenten og returnerer både svaret og response ID
-export const selectAgent = async (message, agentType, previousResponseId = null) => {
+export const selectAgent = async (message, agentType, systemInstruks = "", previousResponseId = null) => {
     // Bestem endpoint basert på agentType
     let endpoint = '/Mistralai';
     if (agentType === 'FagAssistenten') endpoint = '/FagAssistenten';
@@ -22,6 +22,7 @@ export const selectAgent = async (message, agentType, previousResponseId = null)
         },
         body: JSON.stringify({ 
             message: message, 
+            systemInstruks: systemInstruks, // Send instruksjonene med
             previousResponseId: previousResponseId
         })
     });

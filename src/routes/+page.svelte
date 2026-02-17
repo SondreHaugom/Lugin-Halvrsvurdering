@@ -5,10 +5,12 @@
   import { marked } from 'marked';
   import { md, addKaTexToMathStrings, wrapInPreCode } from "../lib/markdown.js";
   import '$lib/global.css';
+  import AgentInnstruks from './components/agentInnstruks.svelte';
 
     // deklarerer globale variabler
     let chatbox, userInput, sendBtn, resetBtn, toggleBtn, selectBtn;
     let currentAgent = "mistralai"; // Standard agent
+    let systemInstruks = ""; // For å holde systeminstruksjoner
 
     // Store response ID per agent
     let agentResponseIds = {
@@ -91,7 +93,7 @@
         console.log("Previous Response ID for " + selectedAgent + ": " + previousResponseId);
         
         // sender melding til SelectAgent.js og venter på svar fra utvalgt agent
-        selectAgent(inputmessage, selectedAgent, previousResponseId).then((result) => {
+        selectAgent(inputmessage, selectedAgent, systemInstruks, previousResponseId).then((result) => {
             // Lagre ny response ID for denne agenten
             agentResponseIds[selectedAgent] = result.responseId;
             agentResponseIDHistory[selectedAgent].push(result.responseId);
@@ -191,6 +193,11 @@
 
 <div class="chatbot_wrapper" class:shifted={isMenuOpen}>
     <div class="current-agent">{currentAgent}</div>
+    
+    {#if currentAgent === "Openai"}
+        <AgentInnstruks bind:systemInstruks />
+    {/if}
+
     <ul class="chatbox">
         <li class="chat_incoming">
         </li>

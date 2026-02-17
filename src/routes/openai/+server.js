@@ -20,11 +20,11 @@ const client = new OpenAI({
 
 export async function POST(request) {
     try {
-        const { message, previousResponseId,} = await request.request.json();
+        const { message, previousResponseId, systemInstruks } = await request.request.json();
 
         const response = await client.responses.create({
             model: "gpt-5.1",
-            instructions: "Du er en hjelpsom assistent", 
+            instructions: systemInstruks || "Du er en hjelpsom assistent og svar altid med, [Standar innstruks]", 
             input: [
                 {
                     role: "user",
