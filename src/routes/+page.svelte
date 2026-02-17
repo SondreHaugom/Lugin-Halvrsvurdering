@@ -124,17 +124,20 @@
 
         if (resetBtn) {
             resetBtn.addEventListener("click", () => {
+            let userChoice = confirm("Er du sikker på at du vil starte en ny samtale? Dette vil slette all tidligere samtalehistorikk.");
+            if (userChoice) {
                 agentResponseIds = {
                     'Openai': null,
                     'Mistralai': null
-                };
+            };
                 agentResponseIDHistory = {
                     'Openai': [],
                     'Mistralai': []
-                };
-                chatbox.innerHTML = '';
+            };
+            chatbox.innerHTML = '';
                 alert("Ny samtale startet!");
-            });
+            }
+        });
         }
 
         if (userInput) {
