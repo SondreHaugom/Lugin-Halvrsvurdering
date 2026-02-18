@@ -9,6 +9,8 @@
 
     
     const saveConfig = () => {
+        let agentKey = selectedConfigAgent.toLowerCase().replace(/\s+/g, '_');
+        
         console.log(`Lagrer instruksjoner for ${selectedConfigAgent}: ${systemInstruks}`);
         setTimeout(() => {
             showPopup = true;
@@ -137,5 +139,3 @@
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
-
-
