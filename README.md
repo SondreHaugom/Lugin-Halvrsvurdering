@@ -35,10 +35,14 @@ En prototype av en chattetjeneste for alle ansatte i Telemark Fylkeskommune.
 - **Multi-agent-system** mulighet for flere agenter
  - **Mistral Large 3** (Mistral) Generell agent for Lugin
  - **GPT-5.1** (OpenAi) Koblet opp OpenAi som valgmulighet
+ - **FagAssistenten** Spesialisert agent for faglige spørsmål
+ - **OCR** Optisk tegngjenkjenning for tekstutdrag fra bilder
 - **Bytte modell underveis** Kan bytte mellom agentene under samtalen
 - **Responsivt design** med gradient-bakgrunner og moderne styling
-- **Modulær arkitektur** med separert agent-logikk
+- **Modulær arkitektur** med separert agent-logikk og komponenter
 - **Tastaturnavigasjon** (Enter for å sende)
+- **Systemflyt-visualisering** med integrert flytdiagram
+- **Modulære komponenter** (UserInput, AgentInstruks, OCR)
 
 
 
@@ -56,14 +60,31 @@ Dette er en prototype av en chatbot som er satt opp med et multi agent arkitektu
 Lugin-Halvrsvurdering/
 ├── src/
 │   ├── lib/
-│   │   └── selectAgent.js          # Velger hvilken AI som skal brukes
+│   │   ├── selectAgent.js          # Velger hvilken AI som skal brukes
+│   │   ├── markdown.js             # Markdown og KaTeX rendering
+│   │   └── global.css              # Global styling
 │   └── routes/
 │       ├── +page.svelte            # Hovedside med chat
-│       ├── Mistralai/+server.js    # Mistral AI backend
-│       └── Openai/+server.js       # OpenAI backend
+│       └── components/
+│           ├── agentInnstruks.svelte    # Systeminstruksjoner
+│           ├── userInput.svelte         # Brukerinput komponent
+│           └── server/
+│               ├── Mistralai/+server.js    # Mistral AI backend
+│               ├── Openai/+server.js       # OpenAI backend  
+│               ├── FagAssistenten/+server.js # Fagassistent backend
+│               └── ocs/OCR.svelte          # OCR funksjonalitet
+├── System flyt.png             # Systemflyt diagram
 ├── package.json
 └── README.md
 ```
+
+### Systemflyt
+
+Se det komplette flytdiagrammet for prosjektet:
+
+![Systemflyt](System%20flyt.png)
+
+*Diagrammet viser den fullstendige dataflyten mellom komponenter, agenter og API-er.*
 
 ### Dataflyt
 
@@ -74,13 +95,13 @@ Lugin-Halvrsvurdering/
     ↓
 🔄 selectAgent.js (bestemmer hvilken agent)
     ↓
-🤖 API Endpoint (/Mistralai eller /Openai)
+🤖 API Endpoint (/components/server/{agent})
     ↓
-🌐 Eksterne AI API (Mistral AI / OpenAI)
+🌐 Eksterne AI API (Mistral/OpenAI/FagAssistenten)
     ↓
 📝 JSON Response tilbake til frontend
     ↓
-💬 Vises i chat-grensesnitt
+💬 Vises i chat-grensesnitt med markdown-rendering
 ```
 
 ### Filforklaring
@@ -89,8 +110,13 @@ Lugin-Halvrsvurdering/
 |-----------|----------|------|
 | `+page.svelte` | Chat-grensesnitt, brukerinteraksjon, DOM-håndtering | Frontend |
 | `selectAgent.js` | Router meldinger til riktig AI-agent | Middleware |
-| `Mistralai/+server.js` | API endpoint for Mistral AI med tool calls support | Backend API |
-| `Openai/+server.js` | API endpoint for OpenAI GPT modeller | Backend API |
+| `components/server/Mistralai/+server.js` | API endpoint for Mistral AI med tool calls support | Backend API |
+| `components/server/Openai/+server.js` | API endpoint for OpenAI GPT modeller | Backend API |
+| `components/server/FagAssistenten/+server.js` | Spesialisert fagassistent endpoint | Backend API |
+| `components/agentInnstruks.svelte` | Systeminstruksjoner for agenter | Component |
+| `components/userInput.svelte` | Modulær brukerinput-komponent | Component |
+| `components/server/ocs/OCR.svelte` | OCR-funksjonalitet for tekstgjenkjenning | Component |
+| `lib/markdown.js` | Markdown og KaTeX rendering | Utility |
 | `+layout.svelte` | Global styling, CSS variabler, favicon | Layout |
 | `Funksjosnkall.py` | Python test script for å teste ut funksjosnkall med Mistral API | Testing |
 
