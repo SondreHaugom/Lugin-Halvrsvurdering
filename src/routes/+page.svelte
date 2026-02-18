@@ -167,7 +167,7 @@
 
 <main>
     <img class="logo" title="Lugin" src="/src/lib/logo/artificial intelligence - Logo2.png" alt="">
-    <button class="sidebar-btn" title="Åpne/lukk meny" on:click={sidebar} type="button">☰</button>
+    <button class="sidebar-btn" title="Åpne/lukk meny" on:click={sidebar} type="button"><svg id="Layer_1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="m0 3v18c0 1.654 1.346 3 3 3h8v-24h-8c-1.654 0-3 1.346-3 3zm9 19h-6c-.551 0-1-.448-1-1v-18c0-.552.449-1 1-1h6zm12-22h-8v24h8c1.654 0 3-1.346 3-3v-18c0-1.654-1.346-3-3-3zm1 21c0 .552-.449 1-1 1h-6v-20h6c.551 0 1 .448 1 1z"/></svg></button>
     <button class="resetBtn" title="Ny Samtale" type="button">⟳</button>
     <div class="sidebar" class:open={isMenuOpen}>
         <h1>
@@ -272,6 +272,10 @@ h2 {
     padding: 5px 10px;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+.sidebar-btn svg {
+    width: 10px;
+    height: 20px;
 }
 .logo {
     position: fixed;
