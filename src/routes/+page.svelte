@@ -7,7 +7,7 @@
   import '$lib/global.css';
   import AgentInnstruks from './components/agentInnstruks.svelte';
   import UserInput from './components/userInput.svelte';
-  import OCR from './components/server/ocs/OCR.svelte';
+  import OCR from './components/server/ocr/OCR.svelte';
 
     // deklarerer globale variabler
     let chatbox, userInput, sendBtn, resetBtn, toggleBtn, selectBtn;
@@ -179,7 +179,7 @@
             <option value="Mistralai">MistralAI</option>
             <option value="Openai">OpenAI</option>
             <option value="FagAssistenten">FagAssistenten</option>
-            <option value="ocs">OCR</option>
+            <option value="OCR"><a href="/src/routes//components/server/ocr/OCR.svelte">OCR</a></option>
         </select>
    <!-- Pråver å legge inn for samtale historikk-->
 
@@ -210,8 +210,9 @@
 
         
     </ul>
-</div>
     <UserInput />
+</div>
+    
 
 </main>
 
