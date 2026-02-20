@@ -382,7 +382,7 @@ h2 {
         padding: 10px;
         margin: 10px;
         width: auto;
-        max-width: 53%;
+        max-width: 73%;
         align-self: flex-start;
         display: block;
 }
