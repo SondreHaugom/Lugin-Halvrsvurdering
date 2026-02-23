@@ -7,11 +7,14 @@
   import '$lib/global.css';
   import AgentInnstruks from './components/agentInnstruks.svelte';
   import UserInput from './components/userInput.svelte';
+  import Transkripsjon from './components/transkripsjon.svelte';
 
     // deklarerer globale variabler
     let chatbox, userInput, sendBtn, resetBtn, toggleBtn, selectBtn;
     let currentAgent = "mistralai"; // Standard agent
     let systemInstruks = ""; // For å holde systeminstruksjoner
+    let audioFile = null; // For å holde valgt lydfil for transkripsjon
+    
 
     // Store response ID per agent
     let agentResponseIds = {
@@ -94,7 +97,7 @@
         console.log("Previous Response ID for " + selectedAgent + ": " + previousResponseId);
         
         // sender melding til SelectAgent.js og venter på svar fra utvalgt agent
-        selectAgent(inputmessage, selectedAgent, systemInstruks, previousResponseId).then((result) => {
+        selectAgent(inputmessage, selectedAgent, systemInstruks,audioFile, previousResponseId).then((result) => {
             // Lagre ny response ID for denne agenten
             agentResponseIds[selectedAgent] = result.responseId;
             agentResponseIDHistory[selectedAgent].push(result.responseId);
@@ -116,6 +119,7 @@
         resetBtn = document.querySelector(".resetBtn");
         toggleBtn = document.querySelector(".sidebar-btn");
         selectBtn = document.querySelector(".select-btn");
+
 
 
         if (sendBtn) {
@@ -178,6 +182,7 @@
             <option value="Mistralai">MistralAI</option>
             <option value="Openai">OpenAI</option>
             <option value="FagAssistenten">FagAssistenten</option>
+            <option value="Transkripsjon">Transkripsjon</option>
         </select>
    <!-- Pråver å legge inn for samtale historikk-->
 
@@ -200,6 +205,10 @@
     
     {#if currentAgent === "Openai"}
         <AgentInnstruks bind:systemInstruks />
+    {/if}
+    {#if currentAgent === "Transkripsjon"}
+        <Transkripsjon bind:audioFile  />
+
     {/if}
 
     <ul class="chatbox">
