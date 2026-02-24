@@ -11,17 +11,22 @@ const client = new OpenAI({
 
 /** @type {import('./$types').requestHandler} */
 
-export async function POST(request) {
+export async function POST({ request }) {
     try {
-        const {audioFile} = await request.request.json();
+        const formData = await request.formData();
+        const audioFile = formData.get('audio');
+
+        if (!audioFile) {
+            return json({ error: 'No audio file provided.' }, { status: 400 });
+        }
 
         const response = await client.audio.transcriptions.create({
+            model: "whisper-1",
             file: audioFile,
-            model: "gpt-4o-transcribe",
-
+            response_format: "json",
         });
         return json({
-            transcription: output_text || 'Beklager, ingen transkripsjon mottatt.'
+            transcription: response.text || 'Beklager, ingen transkripsjon mottatt.'
         });
     } catch (error) {
         console.error("Error in OpenAI API call:", error);

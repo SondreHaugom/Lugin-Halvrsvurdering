@@ -35,6 +35,6 @@ export const selectAgent = async (message, agentType, systemInstruks = "", previ
     // Returner både svar og response ID
     return {
         response: raw || 'Beklager, ingen respons mottatt.',
-        responseId: payload.responseId
+        responseId: payload.responseId 
     };
 }

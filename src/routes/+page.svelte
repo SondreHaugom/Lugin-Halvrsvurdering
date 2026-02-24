@@ -97,7 +97,7 @@
         console.log("Previous Response ID for " + selectedAgent + ": " + previousResponseId);
         
         // sender melding til SelectAgent.js og venter på svar fra utvalgt agent
-        selectAgent(inputmessage, selectedAgent, systemInstruks,audioFile, previousResponseId).then((result) => {
+        selectAgent(inputmessage, selectedAgent, systemInstruks, previousResponseId).then((result) => {
             // Lagre ny response ID for denne agenten
             agentResponseIds[selectedAgent] = result.responseId;
             agentResponseIDHistory[selectedAgent].push(result.responseId);
@@ -106,7 +106,14 @@
             
             
             createChatMessage(result.response, 'chat_incoming', true);
+
         });
+
+
+        transcriptionClient(audioFile).then((transcribedText) => {
+            
+        })
+
         // tømmer inputfeltet etter sending
         userInput.value = "";
     }
@@ -206,9 +213,11 @@
     {#if currentAgent === "Openai"}
         <AgentInnstruks bind:systemInstruks />
     {/if}
-    {#if currentAgent === "Transkripsjon"}
-        <Transkripsjon bind:audioFile  />
 
+    {#if currentAgent === "Transkripsjon"}
+        <Transkripsjon bind:audioFile />
+    {:else}
+        <UserInput />
     {/if}
 
     <ul class="chatbox">
@@ -217,7 +226,7 @@
 
         
     </ul>
-    <UserInput />
+
 </div>
     
 

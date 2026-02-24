@@ -1,11 +1,25 @@
 
 <script>
 import '$lib/global.css';
-
+import { transcriptionClient } from '$lib/transcriptionClient.js';
 export let audioFile = "";
 
 function handleTranscribeClick() {
+
     console.log("Transkriber-knappen ble trykket!");
+
+    if(audioFile && audioFile.length > 0) {
+        transcriptionClient(audioFile[0]).then((transcribedText) => {
+            const resultDiv = document.querySelector('.result');
+            resultDiv.textContent = transcribedText.transcription;
+            console.log("Transkripsjon fullført:", transcribedText);
+        }).catch((error) => {
+            console.error("Feil under transkripsjon:", error);
+            alert("Det skjedde en feil under transkripsjonen. Prøv igjen senere.");
+        });
+    } else {
+        alert("Velg en lydfil først!");
+    }
 }
 </script>
 
@@ -21,9 +35,10 @@ function handleTranscribeClick() {
 
 <style>
 .transkripsjon_section {
-
-    top: 10%;
-    left: 30%;
+    margin-top: 70px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
     width: 40%;
     padding: 20px;
     background-color: var(--color-himmel-10);
